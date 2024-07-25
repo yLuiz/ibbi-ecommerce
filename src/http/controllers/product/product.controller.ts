@@ -14,6 +14,8 @@ import { MESSAGE } from 'src/shared/messages';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { FileService } from 'src/http/services/file/file.service';
+import { IProductFilters } from 'src/shared/interfaces/IProductFilters';
+import { filter } from 'rxjs';
 
 
 @ApiTags('Product')
@@ -52,13 +54,47 @@ export class ProductController {
         required: false,
         description: 'Number of items to skip',
     })
-    async getAll(@Query() query: IPaginationQuery): Promise<IResponseEntity<Product[]>> {
+    @ApiQuery({
+        name: 'name',
+        type: String,
+        required: false,
+        description: 'Product name',
+    })
+    @ApiQuery({
+        name: 'description',
+        type: String,
+        required: false,
+        description: 'Product description',
+    })
+    @ApiQuery({
+        name: 'categories',
+        type: String,
+        required: false,
+        description: 'Categories ID, input like: 1,2,3,50...',
+    })
+    async getAll(@Query() query: IPaginationQuery, @Query() filters: IProductFilters): Promise<IResponseEntity<Product[]>> {
+
+
+
+
+
+
 
         try {
             const { skip, take } = query;
 
             if (!skip || !take) {
                 query = { skip: 0, take: 10 }
+            }
+
+            if (Object.keys(filters).length > 0) {
+                const categories = await this._productService.findAllByFilters(query, filters);
+                const total = await this._productService.getTotal();
+                return {
+                    content: categories,
+                    message: MESSAGE.SERVER.OK,
+                    total,
+                } as IResponseEntity<Product[]>;
             }
 
             const categories = await this._productService.findAll(query);

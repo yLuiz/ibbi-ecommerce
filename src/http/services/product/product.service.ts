@@ -6,6 +6,7 @@ import { UpdateProductDTO } from 'src/shared/dtos/input/UpdateProductDTO';
 import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { MESSAGE } from 'src/shared/messages';
 import { CategoryService } from '../category/category.service';
+import { IProductFilters } from 'src/shared/interfaces/IProductFilters';
 
 @Injectable()
 export class ProductService {
@@ -52,6 +53,52 @@ export class ProductService {
             include: {
                 category: true,
             },
+        });
+    }
+
+    async findAllByFilters(query: IPaginationQuery, filters: IProductFilters) {
+
+        const { name, description, categories } = filters;
+
+
+        // Os ids do parametro chegam em string, aqui é necessário fazer a conversão para number.
+        const serializedCategories = categories?.split(',').map((category) => +category);
+
+        const whereFilter: Prisma.ProductWhereInput = {
+            category: {
+                id: {
+                    in: serializedCategories,
+                }
+            },
+            name: {
+                contains: name
+            },
+            description: {
+                contains: description
+            }
+        }
+
+        let realFilter: Prisma.ProductWhereInput = {};
+        Object.keys(whereFilter).forEach(key => {
+            realFilter = {
+                ...realFilter,
+                [key]: whereFilter[key]
+            }
+        });
+
+        if (!name || !description) {
+            delete whereFilter.name;
+        }
+
+
+
+        return await this._prismaService.product.findMany({
+            skip: +query.skip,
+            take: +query.take,
+            include: {
+                category: true,
+            },
+            where: realFilter
         });
     }
 

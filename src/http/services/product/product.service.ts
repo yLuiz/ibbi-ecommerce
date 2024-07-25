@@ -60,14 +60,13 @@ export class ProductService {
 
         const { name, description, categories } = filters;
 
-
         // Os ids do parametro chegam em string, aqui é necessário fazer a conversão para number.
-        const serializedCategories = categories?.split(',').map((category) => +category);
+        const serializedCategoriesId = categories?.split(',').map((category) => !isNaN(+category) ? 0 : +category);
 
-        const whereFilter: Prisma.ProductWhereInput = {
+        const whereFilters: Prisma.ProductWhereInput = {
             category: {
                 id: {
-                    in: serializedCategories,
+                    in: serializedCategoriesId,
                 }
             },
             name: {
@@ -79,18 +78,12 @@ export class ProductService {
         }
 
         let realFilter: Prisma.ProductWhereInput = {};
-        Object.keys(whereFilter).forEach(key => {
+        Object.keys(whereFilters).forEach(key => {
             realFilter = {
                 ...realFilter,
-                [key]: whereFilter[key]
+                [key]: whereFilters[key]
             }
         });
-
-        if (!name || !description) {
-            delete whereFilter.name;
-        }
-
-
 
         return await this._prismaService.product.findMany({
             skip: +query.skip,

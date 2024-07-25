@@ -41,7 +41,7 @@ export class ProductController {
     }
 
     @Get()
-    @ApiOkResponse({ description: 'Get All Categories with pagination ' })
+    @ApiOkResponse({ description: 'Get All Products with pagination ' })
     @ApiQuery({
         name: 'take',
         type: Number,
@@ -73,13 +73,6 @@ export class ProductController {
         description: 'Categories ID, input like: 1,2,3,50...',
     })
     async getAll(@Query() query: IPaginationQuery, @Query() filters: IProductFilters): Promise<IResponseEntity<Product[]>> {
-
-
-
-
-
-
-
         try {
             const { skip, take } = query;
 
@@ -88,19 +81,20 @@ export class ProductController {
             }
 
             if (Object.keys(filters).length > 0) {
-                const categories = await this._productService.findAllByFilters(query, filters);
+                const products = await this._productService.findAllByFilters(query, filters);
                 const total = await this._productService.getTotal();
+
                 return {
-                    content: categories,
+                    content: products,
                     message: MESSAGE.SERVER.OK,
                     total,
                 } as IResponseEntity<Product[]>;
             }
 
-            const categories = await this._productService.findAll(query);
+            const products = await this._productService.findAll(query);
             const total = await this._productService.getTotal();
             return {
-                content: categories,
+                content: products,
                 message: MESSAGE.SERVER.OK,
                 total,
             } as IResponseEntity<Product[]>;

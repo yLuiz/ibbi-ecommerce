@@ -6,10 +6,12 @@ import { CategoryService } from './services/category/category.service';
 import { ProductService } from './services/product/product.service';
 import { FileController } from './controllers/file/file.controller';
 import { FileService } from './services/file/file.service';
+import { PurchaseController } from './controllers/purchase/purchase.controller';
+import { PurchaseService } from './services/purchase/purchase.service';
 
 @Module({
   imports: [DbModule],
-  providers: [CategoryService, ProductService, FileService],
-  controllers: [CategoryController, ProductController, FileController]
+  providers: [CategoryService, ProductService, FileService, PurchaseService],
+  controllers: [CategoryController, ProductController, FileController, PurchaseController]
 })
 export class HttpModule { }

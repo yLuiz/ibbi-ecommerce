@@ -1,6 +1,5 @@
-import * as path from 'node:path';
 import * as multer from 'multer';
-import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 export const multerConfig = {
     storage: multer.diskStorage({

@@ -45,9 +45,12 @@ model Product {
 }
 
 model Purchase {
-  id         Int     @id @default(autoincrement())
-  user_id    Int
-  user       User    @relation(fields: [user_id], references: [id])
-  product_id Int
-  product    Product @relation(fields: [product_id], references: [id])
+  id          Int      @id @default(autoincrement())
+  quantity    Int
+  total_price Float
+  user_id     Int
+  user        User     @relation(fields: [user_id], references: [id])
+  product_id  Int
+  product     Product  @relation(fields: [product_id], references: [id])
+  created_at  DateTime @default(now())
 }

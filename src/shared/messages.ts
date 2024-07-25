@@ -1,4 +1,4 @@
-// Com esse objeto, as mensagens ficam centralizadas e torna-se mais fácil possiveis alterações ou até mesmo mudança de idioma.
+// Com esse objeto, as mensagens ficam centralizadas, pradonizadas e torna-se mais fácil possiveis alterações ou até mesmo mudança de idioma.
 export const MESSAGE = {
     CATEGORY: {
         NOT_FOUND: 'Categoria não encontrada.',
@@ -34,18 +34,29 @@ export const MESSAGE = {
         CATEGORY_SHOULD_BE_NUMBER: 'ID da categoria deve ser um número',
         CATEGORY_NOT_NEGATIVE: 'ID da categoria inválido.',
         NAME_LENGHT: 'Nome do produto deve ter entre 3 a 255 caracteres.',
+        NOT_EMPTY: 'Produto não pode ser vazio.',
+        INVALID_ID: 'Produto inválido.',
+        ID_NOT_EMPTY: 'ID do Produto não pode ser vazio.',
+        STOCK_NOT_ENOUGH: 'Não há estoque suficiente do produto.'
     },
     USER: {
         NOT_FOUND: 'Usuário não encontrado.',
         CREATE: 'Usuário cadastrado com sucesso.',
         UPDATE: 'Usuário atualizado com sucesso.',
-        DELETE: 'Usuário removido com sucesso.'
+        DELETE: 'Usuário removido com sucesso.',
+        NOT_EMPTY: 'Usuário não pode ser vazio.',
+        INVALID_ID: 'Usuário inválido.',
+        ID_NOT_EMPTY: 'ID do Usuário não pode ser vazio.',
     },
     PURCHASE: {
         NOT_FOUND: 'Compra não encontrada.',
         CREATE: 'Compra finalizada com sucesso.',
         UPDATE: 'Compra atualizada com sucesso.',
-        DELETE: 'Compra removida com sucesso.'
+        DELETE: 'Compra removida com sucesso.',
+        TOTAL_PRICE_NOT_NEGATIVE: 'Valor da compra não pode ser negativo.',
+        QUANTITY_SHOULD_BE_NUMBER: 'Quantidade deve ser um número.',
+        TOTAL_PRICE_SHOULD_BE_NUMBER: 'Valor da compra deve ser um número.',
+        QUANTITY_NOT_ZERO: 'Quantidade deve ser maior que zero.'
     },
     HTTP_PARAMS: {
         NOT_FOUND: 'Parâmetros inválidos ou não fornecidos.',

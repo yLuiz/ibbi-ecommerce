@@ -18,6 +18,7 @@ export const MESSAGE = {
         CREATE: 'Prouduto cadastrado com sucesso.',
         UPDATE: 'Prouduto atualizado com sucesso.',
         DELETE: 'Prouduto removido com sucesso.',
+        NAME_ALREADY_EXISTS: 'Nome do produto já existe.',
         NAME_SHOULD_BE_STRING: 'Nome do produto deve ser uma string.',
         NAME_NOT_EMPTY: 'Nome do produto não pode ser vazio.',
         DESCRIPTION_SHOULD_BE_STRING: 'Descrição do produto deve ser uma string.',
@@ -64,7 +65,8 @@ export const MESSAGE = {
         FORBIDDEN: 'Você não tem permissão para realizar esta ação.',
         NOT_FOUND: 'Recurso não encontrado.',
         INTERNAL_SERVER_ERROR: 'Erro interno do servidor. Cheque os logs!',
-        OK: 'Sucesso.'
+        OK: 'Sucesso.',
+        FILE_NOT_FOUND: 'Arquivo não encontrado.'
     }
 
 }

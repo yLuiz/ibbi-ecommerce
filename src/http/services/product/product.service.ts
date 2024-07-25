@@ -1,12 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Product } from '@prisma/client';
+import { Prisma, Product } from '@prisma/client';
 import { PrismaService } from 'src/db/prisma/prisma.service';
 import { CreateProductDTO } from 'src/shared/dtos/input/CreateProductDTO';
 import { UpdateProductDTO } from 'src/shared/dtos/input/UpdateProductDTO';
 import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { MESSAGE } from 'src/shared/messages';
 import { CategoryService } from '../category/category.service';
-import { IResponseEntity } from 'src/shared/dtos/output/IResponseEntity';
 
 @Injectable()
 export class ProductService {
@@ -16,6 +15,14 @@ export class ProductService {
     ) { }
 
     async create(product: CreateProductDTO): Promise<Product> {
+
+        const productExists = await this._prismaService.product.findFirst({
+            where: { name: product.name },
+        })
+
+        if (productExists) {
+            throw new HttpException(MESSAGE.PRODUCT.NAME_ALREADY_EXISTS, HttpStatus.CONFLICT);
+        }
 
         // Verifica se a categoria existe, caso não, a própria função lançará uma HttpException.
         await this._categoryService.findById(product.category_id);
@@ -29,7 +36,7 @@ export class ProductService {
             category: {
                 connect: { id: product.category_id },
             }
-        } as any
+        } as Prisma.ProductCreateInput;
 
         return await this._prismaService.product.create({
             data: {
@@ -65,6 +72,9 @@ export class ProductService {
 
     async update(id: number, product: UpdateProductDTO): Promise<Product> {
 
+        // Verifica se a categoria existe, caso não exista, a própria função irá lançar uma HttpException.
+        await this._categoryService.findById(product.category_id);
+
         // Verifica se o produto existe, caso não exista, a própria função irá lançar uma HttpException.
         await this.findById(id);
 
@@ -82,7 +92,7 @@ export class ProductService {
 
         product = {
             ...product,
-            path_image: `http://localhost:3000/${imagePath}`
+            path_image: `/file/${imagePath}`
         };
 
         return await this._prismaService.product.update({

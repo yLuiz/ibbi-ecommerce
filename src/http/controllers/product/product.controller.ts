@@ -13,21 +13,18 @@ import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { MESSAGE } from 'src/shared/messages';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { FileService } from 'src/http/services/file/file.service';
 
 
 @ApiTags('Product')
 @Controller('product')
 export class ProductController {
 
-    constructor(private _productService: ProductService) { }
+    constructor(private _productService: ProductService, private _fileService: FileService) { }
 
     @Post()
     @ApiCreatedResponse({ description: 'Create a new product.', })
     async create(@Body() payload: CreateProductDTO): Promise<IResponseEntity<Product>> {
-
-        console.log(payload);
-
-
         try {
             const content = await this._productService.create(payload);
 
@@ -121,14 +118,6 @@ export class ProductController {
         }
     }
 
-    async saveImageInBucket() {
-        return await new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(true);
-            }, 1000);
-        })
-    }
-
     @ApiConsumes('multipart/form-data')
     @Patch(':id')
     @UseInterceptors(FileInterceptor('image', multerConfig))
@@ -136,12 +125,12 @@ export class ProductController {
 
 
         const { filename } = image;
-        await this._productService.updatePathImage(+id, filename)
+        const productUpdated = await this._productService.updatePathImage(+id, filename)
         // fs.unlinkSync(path.join(__dirname, 'tmp', '..', '..', '..', '..', '..', 'tmp', filename));
 
         return {
             id,
-            path_name: image.filename
+            path_name: productUpdated.path_image
         };
     }
 
@@ -155,6 +144,13 @@ export class ProductController {
     async delete(@Param('id') id: number): Promise<IResponseEntity<Product>> {
         try {
             const content = await this._productService.delete(+id);
+            // const content = await this._productService.findById(+id);
+            const filename = content.path_image.split('/file/')[1];
+
+            const isRemovedFile = this._fileService.deleteFileByFilenameNoResopnse(filename);
+
+            if (!isRemovedFile) console.error('File not deleted');
+
             return {
                 content,
                 message: MESSAGE.PRODUCT.DELETE,

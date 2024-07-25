@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Allow, IsNotEmpty, IsNumber, IsString, Length, Min } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, Length, Min } from "class-validator";
 import { MESSAGE } from "src/shared/messages";
 
 export class CreateProductDTO {

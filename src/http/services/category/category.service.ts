@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Category } from '@prisma/client';
 import { PrismaService } from 'src/db/prisma/prisma.service';
-import { ICategoryQuery } from 'src/http/controllers/category/category.controller';
 import { CreateCategoryDTO } from 'src/shared/dtos/input/CreateCategoryDTO';
 import { UpdateCategoryDTO } from 'src/shared/dtos/input/UpdateCategoryDTO';
+import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { MESSAGE } from 'src/shared/messages';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class CategoryService {
         return await this._prismaService.category.create({ data: category });
     }
 
-    async findAll(query: ICategoryQuery) {
+    async findAll(query: IPaginationQuery) {
         return await this._prismaService.category.findMany({
             skip: +query.skip,
             take: +query.take,

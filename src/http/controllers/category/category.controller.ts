@@ -6,12 +6,10 @@ import { CreateCategoryDTO } from 'src/shared/dtos/input/CreateCategoryDTO';
 import { UpdateCategoryDTO } from 'src/shared/dtos/input/UpdateCategoryDTO';
 import { IResponseEntity } from 'src/shared/dtos/output/IResponseEntity';
 import { HandleError } from 'src/shared/errors/handleError';
+import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { MESSAGE } from 'src/shared/messages';
 
-export interface ICategoryQuery {
-    take: number;
-    skip: number;
-}
+
 
 @ApiTags('Category')
 @Controller('category')
@@ -49,7 +47,7 @@ export class CategoryController {
         required: false,
         description: 'Number of items to skip',
     })
-    async getAll(@Query() query: ICategoryQuery): Promise<IResponseEntity<Category[]>> {
+    async getAll(@Query() query: IPaginationQuery): Promise<IResponseEntity<Category[]>> {
 
         try {
             const { skip, take } = query;
@@ -81,8 +79,10 @@ export class CategoryController {
 
     async getOne(@Param('id') id: number): Promise<IResponseEntity<Category>> {
 
+        const isNotValidIdParameter = !id || isNaN(+id);
+
         try {
-            if (!id || typeof +id !== 'number') throw new HttpException(MESSAGE.HTTP_PARAMS.ID_SHOULD_BE_NUMBER, HttpStatus.BAD_REQUEST);
+            if (isNotValidIdParameter) throw new HttpException(MESSAGE.HTTP_PARAMS.ID_SHOULD_BE_NUMBER, HttpStatus.BAD_REQUEST);
             const content = await this._categoryService.findById(+id);
             return {
                 content,

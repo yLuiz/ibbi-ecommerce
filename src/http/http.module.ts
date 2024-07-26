@@ -9,10 +9,11 @@ import { FileService } from './services/file/file.service';
 import { PurchaseController } from './controllers/purchase/purchase.controller';
 import { PurchaseService } from './services/purchase/purchase.service';
 import { UserService } from './services/user/user.service';
+import { UserController } from './controllers/user/user.controller';
 
 @Module({
   imports: [DbModule],
   providers: [CategoryService, ProductService, FileService, PurchaseService, UserService],
-  controllers: [CategoryController, ProductController, FileController, PurchaseController]
+  controllers: [CategoryController, ProductController, FileController, PurchaseController, UserController]
 })
 export class HttpModule { }

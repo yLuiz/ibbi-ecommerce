@@ -4,18 +4,23 @@ import { PrismaService } from 'src/db/prisma/prisma.service';
 import { CreateProductDTO } from 'src/shared/dtos/input/CreateProductDTO';
 import { UpdateProductDTO } from 'src/shared/dtos/input/UpdateProductDTO';
 import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
+import { IProductFilters } from 'src/shared/interfaces/IProductFilters';
 import { MESSAGE } from 'src/shared/messages';
 import { CategoryService } from '../category/category.service';
-import { IProductFilters } from 'src/shared/interfaces/IProductFilters';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class ProductService {
     constructor(
         private _prismaService: PrismaService,
-        private _categoryService: CategoryService
+        private _categoryService: CategoryService,
+        private _userService: UserService
     ) { }
 
     async create(product: CreateProductDTO): Promise<Product> {
+
+        // Verifica se o usuário que está criando realmente existe, caso não, a própria função lançará uma HttpException
+        await this._userService.findById(product.seller_id);
 
         const productExists = await this._prismaService.product.findFirst({
             where: { name: product.name },
@@ -34,6 +39,9 @@ export class ProductService {
             price: product.price,
             path_image: null,
             stock: product.stock,
+            seller: {
+                connect: { id: product.seller_id },
+            },
             category: {
                 connect: { id: product.category_id },
             }

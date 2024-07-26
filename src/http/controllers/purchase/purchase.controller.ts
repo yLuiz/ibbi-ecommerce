@@ -15,6 +15,6 @@ export class PurchaseController {
     @Post()
     @ApiCreatedResponse({ description: 'Create a new purchase.', })
     async create(@Body() purchaseDTO: CreatePurchaseDTO) {
-
+        return await this._purchaseService.create(purchaseDTO);
     }
 }

@@ -50,4 +50,13 @@ export class CreateProductDTO {
     @IsNumber(undefined, { message: MESSAGE.PRODUCT.CATEGORY_SHOULD_BE_NUMBER })
     @Min(0, { message: MESSAGE.PRODUCT.CATEGORY_NOT_NEGATIVE })
     category_id: number;
+
+
+    @ApiProperty({
+        example: 1
+    })
+    @IsNotEmpty({ message: MESSAGE.USER.NOT_EMPTY })
+    @IsNumber(undefined, { message: MESSAGE.USER.INVALID_ID })
+    @Min(0, { message: MESSAGE.USER.INVALID_ID })
+    seller_id: number;
 }

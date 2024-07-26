@@ -1,11 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/db/prisma/prisma.service';
 import { CreateUserDTO } from 'src/shared/dtos/input/CreateUserDTO';
 import { Roles } from 'src/shared/enum/roles';
 import { HandleError } from 'src/shared/errors/handleError';
+import { IPaginationData } from 'src/shared/interfaces/IPaginationData';
 import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
+import { IUserFilter } from 'src/shared/interfaces/IUserFilter';
 import { MESSAGE } from 'src/shared/messages';
 
 @Injectable()
@@ -51,11 +53,13 @@ export class UserService {
         return user;
     }
 
-    async findAll(query: IPaginationQuery): Promise<Omit<User, 'password'>[]> {
+    async findAll(query: IPaginationQuery): Promise<IPaginationData<Omit<User, 'password'>[]>> {
 
         const { skip, take } = query;
 
-        return await this._prismaService.user.findMany({
+        // Implementation of filters
+
+        const users = await this._prismaService.user.findMany({
             take: +take,
             skip: +skip,
             select: {
@@ -68,12 +72,38 @@ export class UserService {
                 updated_at: true,
             }
         });
+
+        const total = await this._prismaService.user.count();
+
+        return {
+            data: users,
+            total,
+        };
     }
 
-    async findAllByFilters(query: IPaginationQuery, filters: any) {
+    async findAllByFilters(query: IPaginationQuery, filters: IUserFilter): Promise<IPaginationData<Omit<User, 'password'>[]>> {
         const { skip, take } = query;
 
-        return await this._prismaService.user.findMany({
+        const { name, role } = filters;
+
+        const roleToNumber = isNaN(+role) ? undefined : +role;
+
+        const whereFilters: Prisma.UserWhereInput = {
+            name: {
+                contains: name
+            },
+            role: roleToNumber
+        }
+
+        let realFilter: Prisma.UserWhereInput = {};
+        Object.keys(whereFilters).forEach(key => {
+            realFilter = {
+                ...realFilter,
+                [key]: whereFilters[key]
+            }
+        });
+
+        const users = await this._prismaService.user.findMany({
             take: +take,
             skip: +skip,
             select: {
@@ -84,8 +114,18 @@ export class UserService {
                 role: true,
                 created_at: true,
                 updated_at: true,
-            }
+            },
+            where: realFilter
         });
+
+        const total = await this._prismaService.user.count({
+            where: realFilter
+        });
+
+        return {
+            data: users,
+            total,
+        };
     }
 
     async findById(id: number): Promise<Omit<User, 'password'>> {
@@ -129,9 +169,5 @@ export class UserService {
         delete user.password;
 
         return user;
-    }
-
-    async getTotal() {
-        return await this._prismaService.user.count();
     }
 }

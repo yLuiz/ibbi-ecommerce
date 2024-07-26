@@ -6,6 +6,7 @@ import { CreateUserDTO } from 'src/shared/dtos/input/CreateUserDTO';
 import { IResponseEntity } from 'src/shared/dtos/output/IResponseEntity';
 import { HandleError } from 'src/shared/errors/handleError';
 import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
+import { IUserFilter } from 'src/shared/interfaces/IUserFilter';
 import { MESSAGE } from 'src/shared/messages';
 
 @ApiTags('User')
@@ -47,9 +48,9 @@ export class UserController {
         name: 'role',
         type: Number,
         required: false,
-        description: 'Product role',
+        description: 'User role',
     })
-    async findAll(@Query() query: IPaginationQuery, filters: any): Promise<IResponseEntity<User[]>> {
+    async findAll(@Query() query: IPaginationQuery, @Query() filters?: IUserFilter): Promise<IResponseEntity<User[]>> {
 
         try {
             const { skip, take } = query;
@@ -59,22 +60,21 @@ export class UserController {
             }
 
             if (Object.keys(filters).length > 0) {
-                const products = await this._userService.findAllByFilters(query, filters);
-                const total = await this._userService.getTotal();
+                const users = await this._userService.findAllByFilters(query, filters);
 
                 return {
-                    content: products,
+                    content: users.data,
                     message: MESSAGE.SERVER.OK,
-                    total,
+                    total: users.total,
                 } as IResponseEntity<User[]>;
             }
 
-            const products = await this._userService.findAll(query);
-            const total = await this._userService.getTotal();
+            const users = await this._userService.findAll(query);
+
             return {
-                content: products,
+                content: users.data,
                 message: MESSAGE.SERVER.OK,
-                total,
+                total: users.total,
             } as IResponseEntity<User[]>;
         }
         catch (error) {

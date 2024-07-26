@@ -4,10 +4,11 @@ import { PrismaService } from 'src/db/prisma/prisma.service';
 import { CreateProductDTO } from 'src/shared/dtos/input/CreateProductDTO';
 import { UpdateProductDTO } from 'src/shared/dtos/input/UpdateProductDTO';
 import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
-import { IProductFilters } from 'src/shared/interfaces/IProductFilters';
+import { IProductFilter } from 'src/shared/interfaces/IProductFilter';
 import { MESSAGE } from 'src/shared/messages';
 import { CategoryService } from '../category/category.service';
 import { UserService } from '../user/user.service';
+import { IPaginationData } from 'src/shared/interfaces/IPaginationData';
 
 @Injectable()
 export class ProductService {
@@ -54,17 +55,24 @@ export class ProductService {
         });
     }
 
-    async findAll(query: IPaginationQuery) {
-        return await this._prismaService.product.findMany({
+    async findAll(query: IPaginationQuery): Promise<IPaginationData<Product[]>> {
+        const products = await this._prismaService.product.findMany({
             skip: +query.skip,
             take: +query.take,
             include: {
                 category: true,
             },
         });
+
+        const total = await this._prismaService.product.count();
+
+        return {
+            data: products,
+            total
+        };
     }
 
-    async findAllByFilters(query: IPaginationQuery, filters: IProductFilters) {
+    async findAllByFilters(query: IPaginationQuery, filters: IProductFilter): Promise<IPaginationData<Product[]>> {
 
         const { name, description, categories } = filters;
 
@@ -93,7 +101,7 @@ export class ProductService {
             }
         });
 
-        return await this._prismaService.product.findMany({
+        const products = await this._prismaService.product.findMany({
             skip: +query.skip,
             take: +query.take,
             include: {
@@ -101,6 +109,13 @@ export class ProductService {
             },
             where: realFilter
         });
+
+        const total = await this._prismaService.product.count({ where: realFilter });
+
+        return {
+            data: products,
+            total
+        };
     }
 
     async findById(id: number): Promise<Product> {
@@ -157,9 +172,5 @@ export class ProductService {
         return this._prismaService.product.delete({
             where: { id }
         });
-    }
-
-    async getTotal() {
-        return await this._prismaService.product.count();
     }
 }

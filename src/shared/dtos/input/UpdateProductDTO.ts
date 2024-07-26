@@ -48,6 +48,8 @@ export class UpdateProductDTO {
     @Min(0, { message: MESSAGE.PRODUCT.CATEGORY_NOT_NEGATIVE })
     category_id?: number;
 
+    sales_quantity?: number;
+
     @ApiProperty({
         example: 1
     })

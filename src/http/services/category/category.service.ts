@@ -3,6 +3,7 @@ import { Category } from '@prisma/client';
 import { PrismaService } from 'src/db/prisma/prisma.service';
 import { CreateCategoryDTO } from 'src/shared/dtos/input/CreateCategoryDTO';
 import { UpdateCategoryDTO } from 'src/shared/dtos/input/UpdateCategoryDTO';
+import { IPaginationData } from 'src/shared/interfaces/IPaginationData';
 import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { MESSAGE } from 'src/shared/messages';
 
@@ -15,11 +16,16 @@ export class CategoryService {
         return await this._prismaService.category.create({ data: category });
     }
 
-    async findAll(query: IPaginationQuery) {
-        return await this._prismaService.category.findMany({
+    async findAll(query: IPaginationQuery): Promise<IPaginationData<Category[]>> {
+
+        const categories = await this._prismaService.category.findMany({
             skip: +query.skip,
             take: +query.take,
         });
+
+        const total = await this._prismaService.category.count();
+
+        return { data: categories, total };
     }
 
     async findById(id: number): Promise<Category> {
@@ -53,9 +59,5 @@ export class CategoryService {
         return this._prismaService.category.delete({
             where: { id }
         });
-    }
-
-    async getTotal() {
-        return await this._prismaService.category.count();
     }
 }

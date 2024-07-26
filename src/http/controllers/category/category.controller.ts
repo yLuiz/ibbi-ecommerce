@@ -57,11 +57,10 @@ export class CategoryController {
             }
 
             const categories = await this._categoryService.findAll(query);
-            const total = await this._categoryService.getTotal();
             return {
-                content: categories,
+                content: categories.data,
                 message: MESSAGE.SERVER.OK,
-                total,
+                total: categories.total,
             } as IResponseEntity<Category[]>;
         }
         catch (error) {

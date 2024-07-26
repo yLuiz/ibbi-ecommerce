@@ -23,15 +23,6 @@ export class CreatePurchaseDTO {
     client_id: number;
 
     @ApiProperty({
-        description: 'Seller ID',
-        type: 'integer',
-        example: 1
-    })
-    @IsNotEmpty({ message: MESSAGE.USER.NOT_EMPTY })
-    @IsNumber(undefined, { message: MESSAGE.USER.INVALID_ID })
-    seller_id: number;
-
-    @ApiProperty({
         description: 'Observation about purchase or product.',
         type: 'string',
         example: 'Deve ser entregue na casa do cliente.'

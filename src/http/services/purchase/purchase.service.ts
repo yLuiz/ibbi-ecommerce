@@ -2,13 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma, Purchase } from '@prisma/client';
 import { PrismaService } from 'src/db/prisma/prisma.service';
 import { CreatePurchaseDTO } from 'src/shared/dtos/input/CreatePurchaseDTO';
-import { ProductService } from '../product/product.service';
-import { UserService } from '../user/user.service';
-import { HandleError } from 'src/shared/errors/handleError';
-import { MESSAGE } from 'src/shared/messages';
-import { IProductFilters } from 'src/shared/interfaces/IProductFilters';
 import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { IPurchaseFilter } from 'src/shared/interfaces/IPurchaseFilter';
+import { MESSAGE } from 'src/shared/messages';
+import { ProductService } from '../product/product.service';
+import { UserService } from '../user/user.service';
+import { IPaginationData } from 'src/shared/interfaces/IPaginationData';
+
+
 
 @Injectable()
 export class PurchaseService {
@@ -20,6 +21,9 @@ export class PurchaseService {
         const client = await this._userService.findById(purchaseDTO.client_id);
         const product = await this._productService.findById(purchaseDTO.product_id);
 
+        if (client.id === product.seller_id) {
+            throw new HttpException(MESSAGE.PURCHASE.CANNOT_BUY_OWN_PRODUCT, HttpStatus.BAD_REQUEST);
+        }
 
         // Verifica se o estoque do produto é suficiente para a compra.
         if (product.stock < purchaseDTO.quantity) {
@@ -48,6 +52,7 @@ export class PurchaseService {
 
         await this._productService.update(purchaseDTO.product_id, {
             stock: product.stock - purchaseDTO.quantity,
+            sales_quantity: product.sales_quantity + purchaseDTO.quantity
         });
 
 
@@ -56,7 +61,7 @@ export class PurchaseService {
         });
     }
 
-    async getAll(query: IPaginationQuery, filters: IPurchaseFilter) {
+    async findAll(query: IPaginationQuery, filters: IPurchaseFilter): Promise<IPaginationData<Purchase[]>> {
         const { client, seller, product } = filters;
 
         const whereFilters: Prisma.PurchaseWhereInput = {
@@ -79,7 +84,7 @@ export class PurchaseService {
             }
         });
 
-        return await this._prismaService.purchase.findMany({
+        const purchases = await this._prismaService.purchase.findMany({
             skip: +query.skip,
             take: +query.take,
             include: {
@@ -89,23 +94,41 @@ export class PurchaseService {
             },
             where: realFilter
         });
+
+        const total = await this._prismaService.purchase.count({
+            where: realFilter
+        });
+
+        return {
+            data: purchases,
+            total
+        };
     }
 
-    async getById() {
+    async findById(id: number) {
+        const purchase = await this._prismaService.purchase.findFirst({
+            where: {
+                id
+            }
+        });
 
-    }
+        if (!purchase) {
+            throw new HttpException(MESSAGE.PURCHASE.NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
 
-    async getByProductId(productId: number) {
-
-    }
-
-    async getByClientId() { }
-
-    async getBySellerId() {
-
+        return purchase;
     }
 
     async delete(id: number) {
+        // Verifica se a compra existe, caso não, a função lançará uma HttpException
+        await this.findById(id);
 
+        const purchaseDeleted = await this._prismaService.purchase.delete({
+            where: {
+                id
+            }
+        });
+
+        return purchaseDeleted;
     }
 }

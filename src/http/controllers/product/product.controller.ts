@@ -1,8 +1,9 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiProperty, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Product } from '@prisma/client';
 import { multerConfig } from 'src/config/multer';
+import { FileService } from 'src/http/services/file/file.service';
 import { ProductService } from 'src/http/services/product/product.service';
 import { CreateProductDTO } from 'src/shared/dtos/input/CreateProductDTO';
 import { UpdateProductDTO } from 'src/shared/dtos/input/UpdateProductDTO';
@@ -10,12 +11,8 @@ import { UploadProductImageDTO } from 'src/shared/dtos/input/UploadProductImageD
 import { IResponseEntity } from 'src/shared/dtos/output/IResponseEntity';
 import { HandleError } from 'src/shared/errors/handleError';
 import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
+import { IProductFilter } from 'src/shared/interfaces/IProductFilter';
 import { MESSAGE } from 'src/shared/messages';
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import { FileService } from 'src/http/services/file/file.service';
-import { IProductFilters } from 'src/shared/interfaces/IProductFilters';
-import { filter } from 'rxjs';
 
 
 @ApiTags('Product')
@@ -72,7 +69,7 @@ export class ProductController {
         required: false,
         description: 'Categories ID, input like: 1,2,3,50...',
     })
-    async getAll(@Query() query: IPaginationQuery, @Query() filters: IProductFilters): Promise<IResponseEntity<Product[]>> {
+    async getAll(@Query() query: IPaginationQuery, @Query() filters: IProductFilter): Promise<IResponseEntity<Product[]>> {
         try {
             const { skip, take } = query;
 
@@ -82,21 +79,20 @@ export class ProductController {
 
             if (Object.keys(filters).length > 0) {
                 const products = await this._productService.findAllByFilters(query, filters);
-                const total = await this._productService.getTotal();
 
                 return {
-                    content: products,
+                    content: products.data,
                     message: MESSAGE.SERVER.OK,
-                    total,
+                    total: products.total,
                 } as IResponseEntity<Product[]>;
             }
 
             const products = await this._productService.findAll(query);
-            const total = await this._productService.getTotal();
+
             return {
-                content: products,
+                content: products.data,
                 message: MESSAGE.SERVER.OK,
-                total,
+                total: products.total,
             } as IResponseEntity<Product[]>;
         }
         catch (error) {

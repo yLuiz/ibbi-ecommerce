@@ -70,7 +70,8 @@ export const MESSAGE = {
         TOTAL_PRICE_SHOULD_BE_NUMBER: 'Valor da compra deve ser um número.',
         QUANTITY_NOT_ZERO: 'Quantidade deve ser maior que zero.',
         TOTAL_PRICE_NOT_CORRECT: 'Valor da compra não está de acordo com o preço e quantidade do produto.',
-        OBSERVATION_MUST_BE_STRING: 'Observação deve ser um texto.'
+        OBSERVATION_MUST_BE_STRING: 'Observação deve ser um texto.',
+        CANNOT_BUY_OWN_PRODUCT: 'Não é possivel comprar seu próprio produto.'
     },
     HTTP_PARAMS: {
         NOT_FOUND: 'Parâmetros inválidos ou não fornecidos.',

@@ -29,7 +29,7 @@ export class ProductController {
 
             return {
                 content,
-                message: MESSAGE.PRODUCT.CREATE
+                message: [MESSAGE.PRODUCT.CREATE]
             } as IResponseEntity<Product>;
         }
         catch (error) {
@@ -64,6 +64,12 @@ export class ProductController {
         description: 'Product description',
     })
     @ApiQuery({
+        name: 'nostock',
+        type: Boolean,
+        required: false,
+        description: 'Products without stock',
+    })
+    @ApiQuery({
         name: 'categories',
         type: String,
         required: false,
@@ -82,7 +88,7 @@ export class ProductController {
 
                 return {
                     content: products.data,
-                    message: MESSAGE.SERVER.OK,
+                    message: [MESSAGE.SERVER.OK],
                     total: products.total,
                 } as IResponseEntity<Product[]>;
             }
@@ -91,7 +97,7 @@ export class ProductController {
 
             return {
                 content: products.data,
-                message: MESSAGE.SERVER.OK,
+                message: [MESSAGE.SERVER.OK],
                 total: products.total,
             } as IResponseEntity<Product[]>;
         }
@@ -112,10 +118,12 @@ export class ProductController {
         const isNotValidIdParameter = !id || isNaN(+id);
         try {
             if (isNotValidIdParameter) throw new HttpException(MESSAGE.HTTP_PARAMS.ID_SHOULD_BE_NUMBER, HttpStatus.BAD_REQUEST);
+
             const content = await this._productService.findById(+id);
+
             return {
                 content,
-                message: MESSAGE.SERVER.OK,
+                message: [MESSAGE.SERVER.OK],
             } as IResponseEntity<Product>;
 
         }
@@ -136,7 +144,7 @@ export class ProductController {
             const content = await this._productService.update(+id, productDTO);
             return {
                 content,
-                message: MESSAGE.PRODUCT.UPDATE,
+                message: [MESSAGE.PRODUCT.UPDATE],
             } as IResponseEntity<Product>
         }
         catch (error) {
@@ -150,14 +158,19 @@ export class ProductController {
     async uploadProductImage(@Param('id') id: number, @Body() body: UploadProductImageDTO, @UploadedFile() image: Express.Multer.File) {
 
 
-        const { filename } = image;
-        const productUpdated = await this._productService.updatePathImage(+id, filename)
-        // fs.unlinkSync(path.join(__dirname, 'tmp', '..', '..', '..', '..', '..', 'tmp', filename));
+        try {
+            const { filename } = image;
+            const productUpdated = await this._productService.updatePathImage(+id, filename)
+            // fs.unlinkSync(path.join(__dirname, 'tmp', '..', '..', '..', '..', '..', 'tmp', filename));
 
-        return {
-            id,
-            path_name: productUpdated.path_image
-        };
+            return {
+                id,
+                path_name: productUpdated.path_image
+            };
+        }
+        catch (error) {
+            throw new HandleError(error);
+        }
     }
 
     @Delete(':id')
@@ -179,7 +192,7 @@ export class ProductController {
 
             return {
                 content,
-                message: MESSAGE.PRODUCT.DELETE,
+                message: [MESSAGE.PRODUCT.DELETE],
             } as IResponseEntity<Product>;
         }
         catch (error) {

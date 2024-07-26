@@ -12,7 +12,10 @@ export class HandleError extends HttpException {
         logger.error(`================ [Erro Status]: ${error?.status || '0'} ================`);
         console.error(error);
         logger.error(`================ [FIM LOG] ================`);
-        super(message, status);
+        super({
+            message: [message],
+            statusCode: status
+        }, status);
 
     }
 }

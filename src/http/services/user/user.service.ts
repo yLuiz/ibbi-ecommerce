@@ -3,8 +3,8 @@ import { Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/db/prisma/prisma.service';
 import { CreateUserDTO } from 'src/shared/dtos/input/CreateUserDTO';
+import { UpdateUserDTO } from 'src/shared/dtos/input/UpdateUserDTO';
 import { Roles } from 'src/shared/enum/roles';
-import { HandleError } from 'src/shared/errors/handleError';
 import { IPaginationData } from 'src/shared/interfaces/IPaginationData';
 import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { IUserFilter } from 'src/shared/interfaces/IUserFilter';
@@ -16,11 +16,6 @@ export class UserService {
 
     async create(userDTO: CreateUserDTO) {
 
-        const roles = Object.values(Roles);
-
-        if (!roles.includes(userDTO.role)) {
-            throw new HttpException(MESSAGE.USER.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
-        }
 
         const emailAlreadyExists = await this._prismaService.user.findFirst({
             where: {
@@ -44,7 +39,6 @@ export class UserService {
                 name: userDTO.name,
                 email: userDTO.email,
                 password: userDTO.password,
-                role: userDTO.role
             },
         });
 
@@ -57,8 +51,6 @@ export class UserService {
 
         const { skip, take } = query;
 
-        // Implementation of filters
-
         const users = await this._prismaService.user.findMany({
             take: +take,
             skip: +skip,
@@ -67,7 +59,6 @@ export class UserService {
                 name: true,
                 email: true,
                 password: false,
-                role: true,
                 created_at: true,
                 updated_at: true,
             }
@@ -84,15 +75,12 @@ export class UserService {
     async findAllByFilters(query: IPaginationQuery, filters: IUserFilter): Promise<IPaginationData<Omit<User, 'password'>[]>> {
         const { skip, take } = query;
 
-        const { name, role } = filters;
-
-        const roleToNumber = isNaN(+role) ? undefined : +role;
+        const { name } = filters;
 
         const whereFilters: Prisma.UserWhereInput = {
             name: {
                 contains: name
             },
-            role: roleToNumber
         }
 
         let realFilter: Prisma.UserWhereInput = {};
@@ -111,7 +99,6 @@ export class UserService {
                 name: true,
                 email: true,
                 password: false,
-                role: true,
                 created_at: true,
                 updated_at: true,
             },
@@ -132,9 +119,12 @@ export class UserService {
 
         const user = await this._prismaService.user.findFirst({
             where: {
-                id,
+                id
             },
         });
+
+        console.log(user);
+
 
         if (!user) throw new HttpException(MESSAGE.USER.NOT_FOUND, HttpStatus.NOT_FOUND);
 
@@ -153,6 +143,41 @@ export class UserService {
         if (!user) throw new HttpException(MESSAGE.USER.NOT_FOUND, HttpStatus.NOT_FOUND);
 
         return user;
+    }
+
+    async update(id: number, userDTO: UpdateUserDTO): Promise<Omit<User, 'password'>> {
+        // Verifica se o usuário existe, caso não, a função irá lançar uma HttpException.
+        await this.findById(id);
+
+        const userByEmail = userDTO?.email ? await this._prismaService.user.findFirst({
+            where: {
+                email: userDTO.email,
+            }
+        }) : undefined;
+
+        if (userByEmail?.id !== id) throw new HttpException(MESSAGE.USER.EMAIL_ALREADY_EXISTS, HttpStatus.CONFLICT);
+
+
+        if (userDTO.password.length > 0) {
+            const saltRounds = 10;
+
+            const salt = await bcrypt.genSalt(saltRounds);
+            const hash = await bcrypt.hash(userDTO.password, salt);
+
+            userDTO.password = hash;
+        }
+
+        const updatedUser = await this._prismaService.user.update({
+            where: {
+                id,
+            },
+            data: userDTO,
+        });
+
+        delete updatedUser.password;
+
+        return updatedUser;
+
     }
 
     async delete(id: number): Promise<Omit<User, 'password'>> {

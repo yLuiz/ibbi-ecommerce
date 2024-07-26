@@ -48,6 +48,7 @@ export class PurchaseService {
             },
             quantity: purchaseDTO.quantity,
             total_price: purchaseDTO.total_price,
+            observation: purchaseDTO?.observation,
         }
 
         await this._productService.update(purchaseDTO.product_id, {

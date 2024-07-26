@@ -25,7 +25,7 @@ export class CategoryController {
 
             return {
                 content,
-                message: MESSAGE.CATEGORY.CREATE
+                message: [MESSAGE.CATEGORY.CREATE]
             } as IResponseEntity<Category>;
         }
         catch (error) {
@@ -59,7 +59,7 @@ export class CategoryController {
             const categories = await this._categoryService.findAll(query);
             return {
                 content: categories.data,
-                message: MESSAGE.SERVER.OK,
+                message: [MESSAGE.SERVER.OK],
                 total: categories.total,
             } as IResponseEntity<Category[]>;
         }
@@ -85,7 +85,7 @@ export class CategoryController {
             const content = await this._categoryService.findById(+id);
             return {
                 content,
-                message: MESSAGE.SERVER.OK,
+                message: [MESSAGE.SERVER.OK],
             } as IResponseEntity<Category>;
 
         }
@@ -106,7 +106,7 @@ export class CategoryController {
             const content = await this._categoryService.update(+id, categoryDTO);
             return {
                 content,
-                message: MESSAGE.CATEGORY.UPDATE,
+                message: [MESSAGE.CATEGORY.UPDATE],
             } as IResponseEntity<Category>
         }
         catch (error) {
@@ -126,7 +126,7 @@ export class CategoryController {
             const content = await this._categoryService.delete(+id);
             return {
                 content,
-                message: MESSAGE.CATEGORY.DELETE,
+                message: [MESSAGE.CATEGORY.DELETE],
             } as IResponseEntity<Category>;
         }
         catch (error) {

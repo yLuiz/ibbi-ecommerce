@@ -62,6 +62,9 @@ export class ProductService {
             include: {
                 category: true,
             },
+            where: {
+                stock: { notIn: [0] },
+            }
         });
 
         const total = await this._prismaService.product.count();
@@ -74,7 +77,7 @@ export class ProductService {
 
     async findAllByFilters(query: IPaginationQuery, filters: IProductFilter): Promise<IPaginationData<Product[]>> {
 
-        const { name, description, categories } = filters;
+        const { name, description, categories, nostock } = filters;
 
         // Os ids do parametro chegam em string, aqui é necessário fazer a conversão para number.
         const serializedCategoriesId = categories?.split(',').map((category) => !isNaN(+category) ? 0 : +category);
@@ -90,6 +93,9 @@ export class ProductService {
             },
             description: {
                 contains: description
+            },
+            stock: {
+                notIn: nostock === 'true' ? undefined : [0]
             }
         }
 

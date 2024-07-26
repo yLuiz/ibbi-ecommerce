@@ -24,7 +24,7 @@ export class FileService {
         }
 
         return response.json({
-            message: `File ${filename} deleted successfully`
+            message: [`File ${filename} deleted successfully`]
         });
     }
     deleteFileByFilenameNoResopnse(filename: string) {

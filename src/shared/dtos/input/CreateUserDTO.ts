@@ -31,13 +31,4 @@ export class CreateUserDTO {
     @IsNotEmpty({ message: MESSAGE.USER.PASSWORD_NOT_EMPTY })
     @Length(6, 255, { message: MESSAGE.USER.PASSWORD_LENGTH })
     password: string;
-
-    @ApiProperty({
-        description: 'Role that user will be registered. (Seller or Client)',
-        example: 1
-    })
-    @IsNotEmpty({ message: MESSAGE.USER.ROLE_NOT_EMPTY })
-    @IsEnum(Roles, { message: MESSAGE.USER.ROLE_INVALID })
-    @IsNumber(undefined, { message: MESSAGE.USER.ROLE_INVALID })
-    role: Roles;
 }

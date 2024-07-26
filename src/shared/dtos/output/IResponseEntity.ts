@@ -1,5 +1,5 @@
 export interface IResponseEntity<T> {
     content: T;
-    message: string;
+    message: string[];
     total?: number;
 }

@@ -14,6 +14,6 @@ import { UserController } from './controllers/user/user.controller';
 @Module({
   imports: [DbModule],
   providers: [CategoryService, ProductService, FileService, PurchaseService, UserService],
-  controllers: [CategoryController, ProductController, FileController, PurchaseController, UserController]
+  controllers: [UserController, CategoryController, ProductController, PurchaseController, FileController]
 })
 export class HttpModule { }

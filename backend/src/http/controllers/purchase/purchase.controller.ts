@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Purchase } from '@prisma/client';
+import { SalesGateway } from 'src/gateway/sales.gateway';
 import { ISalesByCategoryResult, ISalesByProductResult, PurchaseService } from 'src/http/services/purchase/purchase.service';
 import { CreatePurchaseDTO } from 'src/shared/dtos/input/CreatePurchaseDTO';
 import { IResponseEntity } from 'src/shared/dtos/output/IResponseEntity';
@@ -14,14 +15,26 @@ import { MESSAGE } from 'src/shared/messages';
 export class PurchaseController {
 
     constructor(
-        private _purchaseService: PurchaseService
+        private _purchaseService: PurchaseService,
+        private _salesGateway: SalesGateway
     ) { }
-
 
     @Post()
     @ApiCreatedResponse({ description: 'Create a new purchase.', })
-    async create(@Body() purchaseDTO: CreatePurchaseDTO) {
-        return await this._purchaseService.create(purchaseDTO);
+    async create(@Body() purchaseDTO: CreatePurchaseDTO): Promise<IResponseEntity<Purchase>> {
+        try {
+            const newPurchase = await this._purchaseService.create(purchaseDTO);
+
+            this._salesGateway.handleNewPurchase(JSON.stringify(newPurchase));
+
+            return {
+                content: newPurchase,
+                message: [MESSAGE.PURCHASE.CREATE]
+            };
+        }
+        catch (error) {
+            throw new HandleError(error);
+        }
     }
 
     @ApiOkResponse({ description: 'Get All Products with pagination ' })

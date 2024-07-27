@@ -63,6 +63,7 @@ export const MESSAGE = {
     PURCHASE: {
         NOT_FOUND: 'Compra não encontrada.',
         CREATE: 'Compra finalizada com sucesso.',
+        NEW_CREATED: 'Nova compra feita.',
         UPDATE: 'Compra atualizada com sucesso.',
         DELETE: 'Compra removida com sucesso.',
         TOTAL_PRICE_NOT_NEGATIVE: 'Valor da compra não pode ser negativo.',

@@ -8,6 +8,7 @@ import { MESSAGE } from 'src/shared/messages';
 import { ProductService } from '../product/product.service';
 import { UserService } from '../user/user.service';
 import { IPaginationData } from 'src/shared/interfaces/IPaginationData';
+import { SalesGateway } from 'src/gateway/sales.gateway';
 
 export interface ISalesByCategoryResult {
     sales_quantity: string | number,
@@ -26,7 +27,12 @@ export interface ISalesByProductResult {
 @Injectable()
 export class PurchaseService {
 
-    constructor(private _prismaService: PrismaService, private _productService: ProductService, private _userService: UserService) { }
+    constructor(
+        private _prismaService: PrismaService, 
+        private _productService: ProductService, 
+        private _userService: UserService,
+ 
+    ) { }
 
     async create(purchaseDTO: CreatePurchaseDTO): Promise<Purchase> {
         // Verifica se usuário e produto existem, caso não, será lançado uma HttpException.
@@ -145,6 +151,11 @@ export class PurchaseService {
         const purchase = await this._prismaService.purchase.findFirst({
             where: {
                 id
+            },
+            include: {
+                client: true,
+                seller: true,
+                product: true,
             }
         });
 

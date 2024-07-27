@@ -100,7 +100,7 @@ export class ProductService {
         }
 
         let realFilter: Prisma.ProductWhereInput = {};
-        Object.keys(whereFilters).forEach(key => {
+        Object.keys(filters).forEach(key => {
             realFilter = {
                 ...realFilter,
                 [key]: whereFilters[key]

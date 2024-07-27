@@ -98,7 +98,7 @@ export class PurchaseService {
         }
 
         let realFilter: Prisma.PurchaseWhereInput = {};
-        Object.keys(whereFilters).forEach(key => {
+        Object.keys(filters).forEach(key => {
             realFilter = {
                 ...realFilter,
                 [key]: whereFilters[key]
@@ -108,6 +108,9 @@ export class PurchaseService {
         const purchases = await this._prismaService.purchase.findMany({
             skip: +query.skip,
             take: +query.take,
+            orderBy: {
+                id: query.order.toLowerCase() as 'asc' | 'desc'
+            },
             include: {
                 client: true,
                 seller: true,

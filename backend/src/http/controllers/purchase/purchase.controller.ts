@@ -37,14 +37,45 @@ export class PurchaseController {
         required: false,
         description: 'Number of items to skip',
     })
+    @ApiQuery({
+        name: 'order',
+        type: String,
+        required: false,
+        example: 'DESC',
+        description: 'Number of items to skip',
+    })
+    @ApiQuery({
+        name: 'client',
+        type: Number,
+        required: false,
+        description: 'Client id relation to purchase',
+    })
+    @ApiQuery({
+        name: 'seller',
+        type: Number,
+        required: false,
+        description: 'Seller id relation to purchase',
+    })
+    @ApiQuery({
+        name: 'product',
+        type: Number,
+        required: false,
+        description: 'Product id relation to purchase',
+    })
     @Get()
     async findAll(@Query() query: IPaginationQuery, @Query() filters?: IPurchaseFilter): Promise<IResponseEntity<Purchase[]>> {
         try {
-            const { skip, take } = query;
+            const { skip, take, order } = query;
+            
 
             if (!skip || !take) {
-                query = { skip: 0, take: 10 }
+                query = { ...query, skip: 0, take: 10 }
             }
+
+            if (!order || !['desc', 'asc'].includes(order.toLowerCase())) {
+                query.order = 'desc';
+            }
+            
 
             if (Object.keys(filters).length > 0) {
                 const purchases = await this._purchaseService.findAllByFilters(query, filters);

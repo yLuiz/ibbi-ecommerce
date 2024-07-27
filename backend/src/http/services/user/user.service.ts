@@ -94,6 +94,9 @@ export class UserService {
         const users = await this._prismaService.user.findMany({
             take: +take,
             skip: +skip,
+            orderBy: {
+                id: query.order.toLowerCase() as 'asc' | 'desc'
+            },
             select: {
                 id: true,
                 name: true,

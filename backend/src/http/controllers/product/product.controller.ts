@@ -77,10 +77,14 @@ export class ProductController {
     })
     async findAll(@Query() query: IPaginationQuery, @Query() filters: IProductFilter): Promise<IResponseEntity<Product[]>> {
         try {
-            const { skip, take } = query;
+            const { skip, take, order } = query;
 
             if (!skip || !take) {
-                query = { skip: 0, take: 10 }
+                query = { ...query, skip: 0, take: 10 }
+            }
+
+            if (!order || !['asc', 'desc'].includes(order.toLowerCase())) {
+                query = {...query, order: 'desc' }
             }
 
             if (Object.keys(filters).length > 0) {

@@ -110,6 +110,9 @@ export class ProductService {
         const products = await this._prismaService.product.findMany({
             skip: +query.skip,
             take: +query.take,
+            orderBy: {
+                id: query.order.toLowerCase() as 'asc' | 'desc'
+            },
             include: {
                 category: true,
             },

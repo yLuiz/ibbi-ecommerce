@@ -75,7 +75,7 @@ export class ProductController {
         required: false,
         description: 'Categories ID, input like: 1,2,3,50...',
     })
-    async getAll(@Query() query: IPaginationQuery, @Query() filters: IProductFilter): Promise<IResponseEntity<Product[]>> {
+    async findAll(@Query() query: IPaginationQuery, @Query() filters: IProductFilter): Promise<IResponseEntity<Product[]>> {
         try {
             const { skip, take } = query;
 
@@ -113,7 +113,7 @@ export class ProductController {
         required: true,
         description: 'Product ID',
     })
-    async getOne(@Param('id') id: number): Promise<IResponseEntity<Product>> {
+    async findById(@Param('id') id: number): Promise<IResponseEntity<Product>> {
 
         const isNotValidIdParameter = !id || isNaN(+id);
         try {

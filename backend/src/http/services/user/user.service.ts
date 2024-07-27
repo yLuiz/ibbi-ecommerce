@@ -123,9 +123,6 @@ export class UserService {
             },
         });
 
-        console.log(user);
-
-
         if (!user) throw new HttpException(MESSAGE.USER.NOT_FOUND, HttpStatus.NOT_FOUND);
 
         delete user.password;

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -20,9 +14,9 @@ model User {
   password        String
   created_at      DateTime   @default(now())
   updated_at      DateTime   @updatedAt
-  sellerPurchases Purchase[] @relation("SellerPurchases")
-  clientPurchases Purchase[] @relation("ClientPurchases")
   Product         Product[]
+  clientPurchases Purchase[] @relation("ClientPurchases")
+  sellerPurchases Purchase[] @relation("SellerPurchases")
 }
 
 model Category {
@@ -42,26 +36,30 @@ model Product {
   path_image     String?
   stock          Int
   category_id    Int
-  category       Category   @relation(fields: [category_id], references: [id])
-  sales_quantity Int        @default(0)
   seller_id      Int
+  sales_quantity Int        @default(0)
+  category       Category   @relation(fields: [category_id], references: [id])
   seller         User       @relation(fields: [seller_id], references: [id])
   Purchase       Purchase[]
+
+  @@index([category_id], map: "Product_category_id_fkey")
+  @@index([seller_id], map: "Product_seller_id_fkey")
 }
 
 model Purchase {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
+  product_id  Int
+  created_at  DateTime @default(now())
   quantity    Int
   total_price Float
+  client_id   Int
   observation String?
+  seller_id   Int
+  client      User     @relation("ClientPurchases", fields: [client_id], references: [id])
+  product     Product  @relation(fields: [product_id], references: [id])
+  seller      User     @relation("SellerPurchases", fields: [seller_id], references: [id])
 
-  seller_id Int
-  seller    User @relation("SellerPurchases", fields: [seller_id], references: [id])
-
-  client_id Int
-  client    User @relation("ClientPurchases", fields: [client_id], references: [id])
-
-  product_id Int
-  product    Product  @relation(fields: [product_id], references: [id])
-  created_at DateTime @default(now())
+  @@index([client_id], map: "Purchase_client_id_fkey")
+  @@index([product_id], map: "Purchase_product_id_fkey")
+  @@index([seller_id], map: "Purchase_seller_id_fkey")
 }

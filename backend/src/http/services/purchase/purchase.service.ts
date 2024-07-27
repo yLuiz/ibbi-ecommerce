@@ -62,7 +62,27 @@ export class PurchaseService {
         });
     }
 
-    async findAll(query: IPaginationQuery, filters: IPurchaseFilter): Promise<IPaginationData<Purchase[]>> {
+    async findAll(query: IPaginationQuery): Promise<IPaginationData<Purchase[]>> {
+
+        const purchases = await this._prismaService.purchase.findMany({
+            skip: +query.skip,
+            take: +query.take,
+            include: {
+                client: true,
+                seller: true,
+                product: true,
+            }
+        });
+
+        const total = await this._prismaService.purchase.count();
+
+        return {
+            data: purchases,
+            total
+        };
+    }
+
+    async findAllByFilters(query: IPaginationQuery, filters: IPurchaseFilter): Promise<IPaginationData<Purchase[]>> {
         const { client, seller, product } = filters;
 
         const whereFilters: Prisma.PurchaseWhereInput = {

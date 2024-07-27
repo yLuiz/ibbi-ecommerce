@@ -47,7 +47,7 @@ export class CategoryController {
         required: false,
         description: 'Number of items to skip',
     })
-    async getAll(@Query() query: IPaginationQuery): Promise<IResponseEntity<Category[]>> {
+    async findAll(@Query() query: IPaginationQuery): Promise<IResponseEntity<Category[]>> {
 
         try {
             const { skip, take } = query;
@@ -76,7 +76,7 @@ export class CategoryController {
         description: 'Category ID',
     })
 
-    async getOne(@Param('id') id: number): Promise<IResponseEntity<Category>> {
+    async findById(@Param('id') id: number): Promise<IResponseEntity<Category>> {
 
         const isNotValidIdParameter = !id || isNaN(+id);
 

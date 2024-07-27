@@ -13,6 +13,17 @@ export class CategoryService {
     constructor(private _prismaService: PrismaService) { }
 
     async create(category: CreateCategoryDTO): Promise<Category> {
+
+        const categoryAlreadyExists = await this._prismaService.category.findFirst({
+            where: {
+                name: category.name,
+            },
+        });
+
+        if (categoryAlreadyExists) {
+            throw new HttpException(MESSAGE.CATEGORY.NAME_ALREADY_EXISTS, HttpStatus.CONFLICT);
+        }
+
         return await this._prismaService.category.create({ data: category });
     }
 

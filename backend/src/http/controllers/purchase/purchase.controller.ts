@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Purchase } from '@prisma/client';
-import { PurchaseService } from 'src/http/services/purchase/purchase.service';
+import { ISalesByCategoryResult, ISalesByProductResult, PurchaseService } from 'src/http/services/purchase/purchase.service';
 import { CreatePurchaseDTO } from 'src/shared/dtos/input/CreatePurchaseDTO';
 import { IResponseEntity } from 'src/shared/dtos/output/IResponseEntity';
 import { HandleError } from 'src/shared/errors/handleError';
@@ -94,6 +94,40 @@ export class PurchaseController {
                 message: [MESSAGE.SERVER.OK],
                 total: purchases.total,
             } as IResponseEntity<Purchase[]>;
+        }
+        catch (error) {
+            throw new HandleError(error);
+        }
+    }
+
+    @Get('/sales')
+    @ApiOkResponse({ description: 'Get Sales by category' })
+    async findSalesByCategories(): Promise<IResponseEntity<ISalesByCategoryResult[]>> {
+        try {
+
+            const purchases = await this._purchaseService.salesByCategories();
+
+            return {
+                content: purchases,
+                message: [MESSAGE.SERVER.OK],
+            } as IResponseEntity<ISalesByCategoryResult[]>;
+        }
+        catch (error) {
+            throw new HandleError(error);
+        }
+    }
+
+    @Get('/products')
+    @ApiOkResponse({ description: 'Get Sales by top 10 products' })
+    async findSalesByProducts(): Promise<IResponseEntity<ISalesByProductResult[]>> {
+        try {
+
+            const purchases = await this._purchaseService.salesByProducts();
+
+            return {
+                content: purchases,
+                message: [MESSAGE.SERVER.OK],
+            } as IResponseEntity<ISalesByProductResult[]>;
         }
         catch (error) {
             throw new HandleError(error);

@@ -9,7 +9,19 @@ import { ProductService } from '../product/product.service';
 import { UserService } from '../user/user.service';
 import { IPaginationData } from 'src/shared/interfaces/IPaginationData';
 
+export interface ISalesByCategoryResult {
+    sales_quantity: string | number,
+    category_id: number,
+    name: string,
+    description: string
+}
 
+export interface ISalesByProductResult {
+    id: number,
+    name: string,
+    description: string,
+    sales_quantity: number
+}
 
 @Injectable()
 export class PurchaseService {
@@ -154,5 +166,39 @@ export class PurchaseService {
         });
 
         return purchaseDeleted;
+    }
+
+    async salesByCategories(): Promise<ISalesByCategoryResult[]> {
+
+        // Foi necessário utilizar uma query nativa porque o PrismaService estava gerando um erro ao utilizar groupBy ou o aggregation.
+        // Caso a tabela Category e Product tenha mudanças nos campos selecionados, se faz necessário refatorar a Query e adapta-la as mudanças.
+        const salesQuery: ISalesByCategoryResult[] =  await this._prismaService.$queryRaw`
+            SELECT SUM(p.sales_quantity) AS sales_quantity, category_id, c.name, c.description
+            FROM Product p 
+            INNER JOIN Category c ON p.category_id = c.id
+            GROUP BY p.category_id 
+            ORDER BY sales_quantity DESC; 
+        `;
+
+        // O campo sales_quantity volta da consulta como uma string, então é necessário converter para número
+        return salesQuery.map(s => ({
+            ...s,
+            sales_quantity: Number(s.sales_quantity)
+        }));
+    }
+
+    async salesByProducts(): Promise<ISalesByProductResult[]> {
+        return this._prismaService.product.findMany({
+            orderBy: {
+                sales_quantity: 'desc',
+            },
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                sales_quantity: true
+            },
+            take: 10
+        })
     }
 }

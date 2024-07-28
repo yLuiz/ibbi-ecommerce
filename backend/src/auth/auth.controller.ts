@@ -8,7 +8,7 @@ import { Public } from "./public";
 import { IAuthResponse } from "src/shared/interfaces/IAuthResponse";
 
 @ApiTags('Auth')
-@Controller()
+@Controller('v1')
 export class AuthController {
   constructor(private _authService: AuthService) {}
 

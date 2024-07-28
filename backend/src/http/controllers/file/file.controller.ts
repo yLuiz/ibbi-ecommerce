@@ -8,7 +8,7 @@ import { HandleError } from 'src/shared/errors/handleError';
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 @ApiTags('Files')
-@Controller('file')
+@Controller('v1/file')
 export class FileController {
     constructor(private _fileService: FileService) { }
     @ApiOperation({

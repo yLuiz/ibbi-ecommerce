@@ -18,7 +18,7 @@ import { MESSAGE } from 'src/shared/messages';
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 @ApiTags('Product')
-@Controller('product')
+@Controller('v1/product')
 export class ProductController {
 
     constructor(private _productService: ProductService, private _fileService: FileService) { }

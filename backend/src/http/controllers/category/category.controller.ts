@@ -14,7 +14,7 @@ import { MESSAGE } from 'src/shared/messages';
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 @ApiTags('Category')
-@Controller('category')
+@Controller('v1/category')
 export class CategoryController {
     constructor(private _categoryService: CategoryService) { }
 

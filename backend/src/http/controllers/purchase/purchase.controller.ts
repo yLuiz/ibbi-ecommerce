@@ -14,7 +14,7 @@ import { MESSAGE } from 'src/shared/messages';
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 @ApiTags('Purchase')
-@Controller('purchase')
+@Controller('v1/purchase')
 export class PurchaseController {
 
     constructor(

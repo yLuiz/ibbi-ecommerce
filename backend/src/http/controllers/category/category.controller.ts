@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Category } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { CategoryService } from 'src/http/services/category/category.service';
 import { CreateCategoryDTO } from 'src/shared/dtos/input/CreateCategoryDTO';
 import { UpdateCategoryDTO } from 'src/shared/dtos/input/UpdateCategoryDTO';
@@ -10,7 +11,8 @@ import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { MESSAGE } from 'src/shared/messages';
 
 
-
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @ApiTags('Category')
 @Controller('category')
 export class CategoryController {

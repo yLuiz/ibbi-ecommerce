@@ -1,9 +1,12 @@
-import { Controller, Delete, Get, Param, Res } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Delete, Get, Param, Res, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { FileService } from 'src/http/services/file/file.service';
 import { HandleError } from 'src/shared/errors/handleError';
 
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @ApiTags('Files')
 @Controller('file')
 export class FileController {

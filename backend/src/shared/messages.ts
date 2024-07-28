@@ -1,5 +1,10 @@
 // Com esse objeto, as mensagens ficam centralizadas, pradonizadas e torna-se mais fácil possiveis alterações ou até mesmo mudança de idioma.
 export const MESSAGE = {
+    AUTH: {
+        UNAUTHORIZED: 'Não autorizado.',
+        INVALID_CREDENTIALS: 'Credências inválidas.',
+        SESSION_EXPIRED: 'Sua sessão foi expirada.'
+    },
     CATEGORY: {
         NOT_FOUND: 'Categoria não encontrada.',
         CREATE: 'Categoria cadastrada com sucesso.',

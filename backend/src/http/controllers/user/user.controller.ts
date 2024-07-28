@@ -1,6 +1,8 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
-import { ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { Public } from 'src/auth/public';
 import { UserService } from 'src/http/services/user/user.service';
 import { CreateUserDTO } from 'src/shared/dtos/input/CreateUserDTO';
 import { UpdateUserDTO } from 'src/shared/dtos/input/UpdateUserDTO';
@@ -10,11 +12,14 @@ import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { IUserFilter } from 'src/shared/interfaces/IUserFilter';
 import { MESSAGE } from 'src/shared/messages';
 
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @ApiTags('User')
 @Controller('user')
 export class UserController {
     constructor(private _userService: UserService) { }
 
+    @Public()
     @Post()
     @ApiOkResponse({ description: 'Create an user' })
     async createUser(@Body() userDTO: CreateUserDTO) {

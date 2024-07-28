@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Product } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { multerConfig } from 'src/config/multer';
 import { FileService } from 'src/http/services/file/file.service';
 import { ProductService } from 'src/http/services/product/product.service';
@@ -14,7 +15,8 @@ import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { IProductFilter } from 'src/shared/interfaces/IProductFilter';
 import { MESSAGE } from 'src/shared/messages';
 
-
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @ApiTags('Product')
 @Controller('product')
 export class ProductController {

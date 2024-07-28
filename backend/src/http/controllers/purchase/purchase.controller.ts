@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Query } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Purchase } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { SalesGateway } from 'src/gateway/sales.gateway';
 import { ISalesByCategoryResult, ISalesByProductResult, PurchaseService } from 'src/http/services/purchase/purchase.service';
 import { CreatePurchaseDTO } from 'src/shared/dtos/input/CreatePurchaseDTO';
@@ -10,6 +11,8 @@ import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { IPurchaseFilter } from 'src/shared/interfaces/IPurchaseFilter';
 import { MESSAGE } from 'src/shared/messages';
 
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @ApiTags('Purchase')
 @Controller('purchase')
 export class PurchaseController {

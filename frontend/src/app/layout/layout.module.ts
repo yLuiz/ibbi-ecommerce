@@ -6,12 +6,23 @@ import { LayoutRoutingModule } from './layout-routing.module';
 import { ComponentsModule } from '../components/components.module';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
+import { TopbarComponent } from './topbar/topbar.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { MenuComponent } from './menu/menu.component';
+import { MenuitemComponent } from './menuitem/menuitem.component';
+import { LayoutService } from './services/layout.service';
+import { MenuService } from './services/menu.service';
+import { MenuModule }from 'primeng/menu';
 
 
 
 @NgModule({
   declarations: [
     LayoutComponent,
+    TopbarComponent,
+    SidebarComponent,
+    MenuComponent,
+    MenuitemComponent,
   ],
   imports: [
     CommonModule,
@@ -19,7 +30,8 @@ import { MessageService } from 'primeng/api';
     RouterModule,
     LayoutRoutingModule,
     ButtonModule,
+    MenuModule
   ],
-  providers: [MessageService]
+  providers: [MessageService, LayoutService, MenuService]
 })
 export class LayoutModule { }

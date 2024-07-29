@@ -4,14 +4,20 @@ import { LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
 import { LayoutComponent } from './layout/layout.component';
 import { AuthGuard } from './guards/auth.guard';
+import { LayoutRoutingModule } from './layout/layout-routing.module';
+import { UserFormComponent } from './components/user-form/user-form.component';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    pathMatch: 'full',
-    canActivate: [AuthGuard],
-    canActivateChild: [AuthGuard]
+    children: [
+      {
+        path: 'form2',
+        component: UserFormComponent
+      }
+    ],
+    canActivate: [AuthGuard]
   },
   {
     path: 'auth',
@@ -23,6 +29,10 @@ const routes: Routes = [
     component: RegisterComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: '**',
+    redirectTo: ''
+  }
   
 ];
 

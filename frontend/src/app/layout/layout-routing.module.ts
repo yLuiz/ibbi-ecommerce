@@ -5,7 +5,7 @@ import { UserFormComponent } from '../components/user-form/user-form.component';
 const routes: Routes = [
   {
     path: 'form',
-    component: UserFormComponent
+    component: UserFormComponent 
   }
 ];
 

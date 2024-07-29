@@ -8,6 +8,7 @@ import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { RegisterComponent } from './register.component';
 import { MessageService } from 'primeng/api';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { MessageService } from 'primeng/api';
     PasswordModule,
     ReactiveFormsModule,
     FormsModule,
-    ToastModule
+    ToastModule,
+    RouterModule
   ],
 
   providers: [MessageService],

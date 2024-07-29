@@ -2,15 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { IErrorResponse } from '../../../interfaces/api/IErrorResponse';
+import { IErrorResponse } from '../../../shared/interfaces/api/IErrorResponse';
 import { AuthService } from '../../../services/auth.service';
+import { ToastSeverity } from '../../../shared/types/ToastSeverity';
+import { Router } from '@angular/router';
 
-enum ToastSeverity {
-    SUCCESS = 'success',
-    ERROR = 'error',
-    WARN = 'warn',
-    INFO = 'info'
-}
 
 @Component({
     selector: 'app-login',
@@ -25,7 +21,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     constructor(
         private _authService: AuthService,
-        private _messageService: MessageService
+        private _messageService: MessageService,
+        private _router: Router
     ) {
         this.loginForm = new FormGroup({
             email: new FormControl('', [Validators.required, Validators.email]),
@@ -33,13 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         })
     }
 
-    valCheck: string[] = ['remember'];
-
-    signIn() {
-        console.log({
-            email: this.email?.value,
-            password: this.password?.value
-        });        
+    signIn() {  
 
         this.isLoading = true;
 
@@ -48,12 +39,14 @@ export class LoginComponent implements OnInit, OnDestroy {
                 next: (response) => {
                     console.log(response);
                     this._messageService.add({ key: 'tst', severity: ToastSeverity.SUCCESS, summary: 'Sucesso', detail: 'Login efetuado com sucesso.' });
+                    this._authService.setToken(response.access_token);
+                    this._router.navigate(['/']);
 
                 },
                 error: (response:  IErrorResponse) => {
                     console.error(response);
 
-                    const errorMessage = typeof response.error.message === 'string' ? response.error.message : response.error.message.at(-1);
+                    const errorMessage = typeof response.error.message === 'string' ? response.error.message : response.error.message.at(0);
 
                     this._messageService.add({ key: 'tst', severity: 'error', summary: 'Erro', detail: errorMessage });
                 }
@@ -61,8 +54,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         
         this._loginSubscription.add(() => this.isLoading = false);
     }
-
-    handleSubmit() {}
 
     get email() {
         return this.loginForm.get('email');

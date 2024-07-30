@@ -133,7 +133,7 @@ export class PurchaseController {
         }
     }
 
-    @Get('/products')
+    @Get('/topproducts')
     @ApiOkResponse({ description: 'Get Sales by top 10 products' })
     async findSalesByProducts(): Promise<IResponseEntity<ISalesByProductResult[]>> {
         try {

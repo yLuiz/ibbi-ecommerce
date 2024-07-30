@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { UserFormComponent } from '../components/user-form/user-form.component';
+import { ProductsComponent } from '../pages/products/products.component';
+import { AuthGuard } from '../guards/auth.guard';
+
 
 const routes: Routes = [
   {
-    path: 'form',
-    component: UserFormComponent 
+    path: 'products',
+    component: ProductsComponent,
+    canActivate: [AuthGuard]
   }
+  
 ];
 
 @NgModule({

@@ -1,22 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
+import { LayoutComponent } from './layout/layout.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
-import { LayoutComponent } from './layout/layout.component';
-import { AuthGuard } from './guards/auth.guard';
-import { LayoutRoutingModule } from './layout/layout-routing.module';
-import { UserFormComponent } from './components/user-form/user-form.component';
+import { ProductsComponent } from './pages/products/products.component';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
-    children: [
-      {
-        path: 'form2',
-        component: UserFormComponent
-      }
-    ],
+    loadChildren: () => import('./layout/layout.module').then(m => m.LayoutModule),
     canActivate: [AuthGuard]
   },
   {

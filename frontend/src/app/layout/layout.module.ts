@@ -1,18 +1,18 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LayoutComponent } from './layout.component';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { LayoutRoutingModule } from './layout-routing.module';
-import { ComponentsModule } from '../components/components.module';
-import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
-import { TopbarComponent } from './topbar/topbar.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { ButtonModule } from 'primeng/button';
+import { MenuModule } from 'primeng/menu';
+import { ComponentsModule } from '../components/components.module';
+import { LayoutComponent } from './layout.component';
 import { MenuComponent } from './menu/menu.component';
 import { MenuitemComponent } from './menuitem/menuitem.component';
 import { LayoutService } from './services/layout.service';
 import { MenuService } from './services/menu.service';
-import { MenuModule }from 'primeng/menu';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { TopbarComponent } from './topbar/topbar.component';
+import { LayoutRoutingModule } from './layout-routing.module';
 
 
 
@@ -28,9 +28,9 @@ import { MenuModule }from 'primeng/menu';
     CommonModule,
     ComponentsModule,
     RouterModule,
-    LayoutRoutingModule,
     ButtonModule,
-    MenuModule
+    MenuModule,
+    LayoutRoutingModule
   ],
   providers: [MessageService, LayoutService, MenuService]
 })

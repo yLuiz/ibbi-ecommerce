@@ -116,8 +116,8 @@ export class PurchaseController {
         }
     }
 
-    @Get('/sales')
-    @ApiOkResponse({ description: 'Get Sales by category' })
+    @Get('/category')
+    @ApiOkResponse({ description: 'Get Purchase by category' })
     async findSalesByCategories(): Promise<IResponseEntity<ISalesByCategoryResult[]>> {
         try {
 

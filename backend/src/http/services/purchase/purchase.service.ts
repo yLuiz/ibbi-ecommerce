@@ -86,8 +86,22 @@ export class PurchaseService {
             skip: +query.skip,
             take: +query.take,
             include: {
-                client: true,
-                seller: true,
+                client: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        password: false
+                    }
+                },
+                seller: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        password: false
+                    }
+                },
                 product: true,
             }
         });
@@ -130,8 +144,24 @@ export class PurchaseService {
                 id: query.order.toLowerCase() as 'asc' | 'desc'
             },
             include: {
-                client: true,
-                seller: true,
+                client: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        password: false
+
+                    }
+                },
+                seller: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        password: false
+
+                    }
+                },
                 product: true,
             },
             where: realFilter

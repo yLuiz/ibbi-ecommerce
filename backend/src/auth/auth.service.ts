@@ -3,19 +3,33 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/http/services/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { MESSAGE } from 'src/shared/messages';
+import { User } from '@prisma/client';
+import { HandleError } from 'src/shared/errors/handleError';
 
 @Injectable()
 export class AuthService {
     constructor(
         private _jwtService: JwtService,
-        private _userRepository: UserService,
+        private _userService: UserService,
       ) {}
     
       async signIn(
         email: string,
         password: string,
       ): Promise<{ access_token: string } | null> {
-        const user = await this._userRepository.findByEmail(email);
+
+        let user: User | undefined;
+
+        try {
+          user = await this._userService.findByEmail(email);
+        }
+        catch (error) {
+          if (error?.status === 404) {
+            throw new HttpException(MESSAGE.AUTH.INVALID_CREDENTIALS, HttpStatus.UNAUTHORIZED);
+          }
+
+          throw new HandleError(error);
+        }
 
         if (!user) return null;
 

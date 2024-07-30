@@ -61,6 +61,7 @@ export class ProductService {
             take: +query.take,
             include: {
                 category: true,
+                seller: true,
             },
             where: {
                 stock: { notIn: [0] },
@@ -115,6 +116,7 @@ export class ProductService {
             },
             include: {
                 category: true,
+                seller: true,
             },
             where: realFilter
         });
@@ -132,6 +134,7 @@ export class ProductService {
             where: { id },
             include: {
                 category: true,
+                seller: true,
             },
         });
 

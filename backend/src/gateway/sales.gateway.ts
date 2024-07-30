@@ -3,7 +3,7 @@ import { MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage
 import { Server, Socket } from 'socket.io';
 import { MESSAGE } from 'src/shared/messages';
 
-const corsOrigins = ["**"];
+const corsOrigins = ["*"];
 
 const options = {
   cors: {

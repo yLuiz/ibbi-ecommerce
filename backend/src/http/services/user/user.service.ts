@@ -158,7 +158,7 @@ export class UserService {
         if (userByEmail?.id !== id) throw new HttpException(MESSAGE.USER.EMAIL_ALREADY_EXISTS, HttpStatus.CONFLICT);
 
 
-        if (userDTO.password.length > 0) {
+        if (userDTO.password?.length > 0) {
             const saltRounds = 10;
 
             const salt = await bcrypt.genSalt(saltRounds);

@@ -37,10 +37,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         this._loginSubscription = this._authService.login(this.email?.value, this.password?.value)
             .subscribe({
                 next: (response) => {
-                    console.log(response);
                     this._messageService.add({ key: 'tst', severity: ToastSeverity.SUCCESS, summary: 'Sucesso', detail: 'Login efetuado com sucesso.' });
                     this._authService.setToken(response.access_token);
-                    this._router.navigate(['/']);
+                    this.loginForm.disable();
+                    setTimeout(() => {
+                        this._router.navigate(['/']);
+                    }, 1000);
 
                 },
                 error: (response:  IErrorResponse) => {

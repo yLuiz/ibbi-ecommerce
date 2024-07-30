@@ -13,6 +13,7 @@ import { MenuService } from './services/menu.service';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { TopbarComponent } from './topbar/topbar.component';
 import { LayoutRoutingModule } from './layout-routing.module';
+import { ToastModule } from 'primeng/toast';
 
 
 
@@ -26,11 +27,11 @@ import { LayoutRoutingModule } from './layout-routing.module';
   ],
   imports: [
     CommonModule,
-    ComponentsModule,
     RouterModule,
     ButtonModule,
     MenuModule,
-    LayoutRoutingModule
+    ToastModule,
+    LayoutRoutingModule,
   ],
   providers: [MessageService, LayoutService, MenuService]
 })

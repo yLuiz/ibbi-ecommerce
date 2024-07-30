@@ -20,8 +20,6 @@ interface IAuthRequest {
     styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-
-    registerForm!: FormGroup;
     isLoading: boolean = false;
     private _loginSubscription?: Subscription;
 
@@ -30,23 +28,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
         private _userService: UserService,
         private _messageService: MessageService,
         private _router: Router
-    ) {
-        this.registerForm = new FormGroup({
-            name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]),
-            email: new FormControl('', [Validators.required, Validators.email]),
-            password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(255)]),
-            confirmedPassword: new FormControl('', [Validators.required]),
-        })
-    }
+    ) {}
 
-    register() {
-
-        const newUser: ICreateUser = {
-            name: this.name?.value,
-            email: this.email?.value,
-            password: this.password?.value
-        };
-
+    register(newUser: ICreateUser) {
         this.isLoading = true;
 
         this._loginSubscription = this._userService.register(newUser)
@@ -66,26 +50,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
                     const errorMessage = typeof response.error.message === 'string' ? response.error.message : response.error.message.at(-1);
 
                     this._messageService.add({ key: 'tst', severity: 'error', summary: 'Erro', detail: errorMessage });
+                    this.isLoading = false;
                 }
             })
         
-        this._loginSubscription.add(() => this.isLoading = false);
-    }
-
-    get name() {
-        return this.registerForm.get('name');
-    }
-    
-    get email() {
-        return this.registerForm.get('email');
-    }
-
-    get password() {
-        return this.registerForm.get('password');
-    }
-
-    get confirmedPassword() {
-        return this.registerForm.get('confirmedPassword');
+        this._loginSubscription.add();
     }
 
     private _authenticate({ email, password }: IAuthRequest) {
@@ -93,13 +62,17 @@ export class RegisterComponent implements OnInit, OnDestroy {
            .subscribe({
                 next: (response) => {
                     this._authService.setToken(response.access_token);
-                    this._router.navigate(['/']);
+                    setTimeout(() => {
+                        this._router.navigate(['/']);
+                    }, 1000);
 
                     // Login success
                 },
-                error: (response) => {
+                error: (response: IErrorResponse) => {
                     console.error(response);
-                    // Login error
+                    const errorMessage = typeof response.error.message === 'string' ? response.error.message : response.error.message.at(-1);
+
+                    this._messageService.add({ key: 'tst', severity: 'error', summary: 'Erro', detail: errorMessage });
                 }
             })
     }

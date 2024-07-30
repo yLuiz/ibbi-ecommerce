@@ -1,3 +1,3 @@
-export interface IAuthReponse {
+export interface IAuthResponse {
     access_token: string;
 }

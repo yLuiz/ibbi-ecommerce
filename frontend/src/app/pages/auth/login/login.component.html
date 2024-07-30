@@ -21,7 +21,7 @@
                             <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Esqueceu sua senha?</a>
                         </div>
                         
-                        <button [disabled]="isLoading || formDir.invalid" (click)="signIn()" pButton pRipple class="w-full p-3 text-xl">
+                        <button [disabled]="isLoading || formDir.invalid || loginForm.disabled" (click)="signIn()" pButton pRipple class="w-full p-3 text-xl">
                             <span *ngIf="!isLoading; else loading" class="flex align-items-center justify-content-center w-full">
                                 Entrar
                             </span>
@@ -34,7 +34,6 @@
                         <div class="flex my-4 ml-2 align-items-center mb-5 gap-2">
                             <span>Não possui cadastro?</span>
                             <a [routerLink]="['/register']" class="font-medium no-underline text-right cursor-pointer" style="color: var(--primary-color)"> Registre-se</a>
-
                         </div>
                     </div>
                 </div>

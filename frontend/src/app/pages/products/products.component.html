@@ -1,1 +1,38 @@
-<p>products works!</p>
+<ng-container *ngIf="isAddingNewProduct; else listProducts" >
+  <app-product-form (onBack)="toggleAddProduct()" ></app-product-form>
+</ng-container>
+
+<ng-template #listProducts>
+  <p-toolbar>
+    <div class="p-toolbar-group-center">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText placeholder="Pesquisar" />
+      </span>
+    </div>
+    <p-multiSelect
+        [options]="cities"
+        [(ngModel)]="selectedCities"
+        optionLabel="name"
+        placeholder="Filtrar por categoria"
+      />
+    <div class="p-toolbar-group-end gap-4">
+  
+      <p-button (onClick)="toggleAddProduct()">
+        <i class="pi pi-objects-column mr-2"></i>
+        Adicionar Produto
+      </p-button>
+      <p-splitButton label="Save" icon="pi pi-check" [model]="items" />
+    </div>
+  </p-toolbar>
+
+  <ul class="flex gap-4 flex-wrap">
+    <li type="none" *ngFor="let product of products">
+      <app-product-card [product]="product"></app-product-card>
+    </li>
+  </ul>
+</ng-template>
+
+
+
+

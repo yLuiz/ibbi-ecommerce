@@ -2,8 +2,9 @@
 @import "primeicons/primeicons.css";
 @import "../node_modules/primeflex/primeflex.scss";
 @import "./assets/layout/layout.scss";
+@import "./assets/override/override.scss";
 
-@layer base, primeng, app;
+@layer base, app, primeng;
 
 * {
     box-sizing: border-box;

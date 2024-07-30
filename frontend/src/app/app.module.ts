@@ -9,6 +9,7 @@ import { PagesModule } from './pages/pages.module';
 import { ServicesModule } from './services/services.module';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { LayoutModule } from './layout/layout.module';
+import { ComponentsModule } from './components/components.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,7 @@ import { LayoutModule } from './layout/layout.module';
     RouterModule,
     PagesModule,
     ServicesModule,
-    LayoutModule
+    LayoutModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

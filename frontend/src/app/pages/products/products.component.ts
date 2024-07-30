@@ -1,11 +1,10 @@
-import { HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { CategoryService } from '../../services/category.service';
 import { ProductService } from '../../services/product.service';
+import { IProductFilter } from '../../shared/interfaces/api/IProductFilter';
 import { ICategory } from '../../shared/interfaces/models/ICategory';
 import { ICreateProduct } from '../../shared/interfaces/models/ICreateProduct';
 import { IProduct } from '../../shared/interfaces/models/IProduct';
-import { IProductFilter } from '../../shared/interfaces/api/IProductFilter';
 
 export interface IProductFormSubmit {
   productJSON: ICreateProduct,
@@ -26,7 +25,7 @@ interface IFilter {
 export class ProductsComponent {
   constructor(
     private _productService: ProductService,
-    private _categoryService: CategoryService
+    private _categoryService: CategoryService,
   ) {}
 
   isAddingNewProduct = false;

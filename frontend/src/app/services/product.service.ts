@@ -5,6 +5,7 @@ import { IResponseEntity } from '../shared/interfaces/api/IResponseEntity';
 import { IProduct } from '../shared/interfaces/models/IProduct';
 import { IProductFilter } from '../shared/interfaces/api/IProductFilter';
 import { ICreateProduct } from '../shared/interfaces/models/ICreateProduct';
+import { IPagination } from '../shared/interfaces/api/IPagination';
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +25,6 @@ export class ProductService {
     const [id, image] = [body.get('id'), body.get('image')];
     body.delete('id');
 
-    console.log(id);
-    console.log(image);
-
     if (!id || !image) {
       throw new Error('Image and Product Id is required!');
     }
@@ -34,7 +32,7 @@ export class ProductService {
     return this._http.patch<IResponseEntity<IProduct>>(`${environment.apiUrl}/product/${+id}`, body);
 
   }
-  listAll(pagination?: any, filters?: IProductFilter) {
+  listAll(pagination?: IPagination, filters?: IProductFilter) {
     if (!filters?.categories) {
       delete filters?.categories;
     }
@@ -45,7 +43,9 @@ export class ProductService {
       ...filters
     } });
   }
-  listById(id: number) {}
+  listById(id: number) {
+    return this._http.get<IResponseEntity<IProduct>>(`${environment.apiUrl}/product/${id}`);
+  }
 
   listByUser(id: number, pagination: any, filters: any) {}
 

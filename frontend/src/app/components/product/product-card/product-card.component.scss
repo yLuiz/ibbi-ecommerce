@@ -1,4 +1,17 @@
 .product-card {
+
+  .newpurchase-link {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    a {
+      text-decoration: none;
+      color: initial;
+    }    
+  }
+
   .p-card {
     display: flex;
     flex-direction: column;

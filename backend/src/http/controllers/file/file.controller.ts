@@ -2,6 +2,7 @@ import { Controller, Delete, Get, Param, Res, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Public } from 'src/auth/public';
 import { FileService } from 'src/http/services/file/file.service';
 import { HandleError } from 'src/shared/errors/handleError';
 
@@ -14,6 +15,7 @@ export class FileController {
     @ApiOperation({
         summary: 'Get file by filename.'
     })
+    @Public()
     @Get(':filename')
     getFileByFilename(@Param('filename') filename: string, @Res() response: Response) {
         try {

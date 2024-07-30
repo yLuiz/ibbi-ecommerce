@@ -1,5 +1,5 @@
 <ng-container *ngIf="isAddingNewProduct; else listProducts" >
-  <app-product-form (onBack)="toggleAddProduct()" ></app-product-form>
+  <app-product-form (onSubmit)="createProduct($event)" (onBack)="toggleAddProduct()" ></app-product-form>
 </ng-container>
 
 <ng-template #listProducts>
@@ -7,22 +7,28 @@
     <div class="p-toolbar-group-center">
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
-        <input pInputText placeholder="Pesquisar" />
+        <input (keydown.enter)="search()" [(ngModel)]="nameOrDescription" pInputText placeholder="Pesquisar" />
       </span>
     </div>
-    <p-multiSelect
-        [options]="cities"
-        [(ngModel)]="selectedCities"
+    <div class="flex  gap-4 flex-wrap">
+      <p-multiSelect
+        [options]="categories"
+        [(ngModel)]="selectedCategories"
         optionLabel="name"
         placeholder="Filtrar por categoria"
+        class="catogory-select"
       />
+      <p-button class="search-button" (onClick)="search()">
+        <i class="pi pi-search mr-2"></i>
+        Pesquisar
+      </p-button>
+    </div>
     <div class="p-toolbar-group-end gap-4">
   
       <p-button (onClick)="toggleAddProduct()">
         <i class="pi pi-objects-column mr-2"></i>
         Adicionar Produto
       </p-button>
-      <p-splitButton label="Save" icon="pi pi-check" [model]="items" />
     </div>
   </p-toolbar>
 

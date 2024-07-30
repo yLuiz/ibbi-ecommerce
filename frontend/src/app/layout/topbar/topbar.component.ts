@@ -33,10 +33,7 @@ export class TopbarComponent {
   ngOnInit() {
     this.menuItems = [
       {
-        label: 'Editar perfil', icon: 'pi pi-fw pi-user-edit', command: () => {
-          console.log('saved');
-          
-        }
+        label: 'Editar perfil', icon: 'pi pi-fw pi-user-edit', command: () => {}
       },
       {
         label: 'Sair', icon: 'pi pi-fw pi-sign-out', command: () => this.logout(),

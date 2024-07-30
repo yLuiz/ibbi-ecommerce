@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { IProduct } from '../../../shared/interfaces/models/IProduct';
+import { environment } from '../../../../environments/environment.development';
+import { AuthService } from '../../../services/auth.service';
 
 interface IProductInfo extends Omit<IProduct, 'price'> {
   price: string;
@@ -14,7 +16,14 @@ interface IProductInfo extends Omit<IProduct, 'price'> {
 export class ProductCardComponent {
   @Input() product!: IProduct;
   productInfo!: IProductInfo;
-  ngOnInit() {
+  url: string = environment.apiUrl;
+  userId?: number;
+
+  constructor(private _authService: AuthService) {}
+
+  ngOnInit() {    
+
+    this.userId = this._authService.decodePayloadJWT()?.sub;
 
     this.productInfo = {
       ...this.product,

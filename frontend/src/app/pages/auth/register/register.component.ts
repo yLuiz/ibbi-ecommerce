@@ -36,7 +36,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this._loginSubscription = this._userService.register(newUser)
             .subscribe({
                 next: (response) => {
-                    console.log(response);
                     this._messageService.add({ key: 'tst', severity: ToastSeverity.SUCCESS, summary: 'Sucesso', detail: 'Cadastro efetuado com sucesso.' });
                     this._authenticate({
                         email: newUser.email,

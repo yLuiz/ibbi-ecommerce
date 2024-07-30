@@ -66,7 +66,7 @@ export class ProductService {
         seller: true,
       },
       orderBy: {
-        id: 'desc'
+        id: 'desc',
       },
       where: {
         stock: { notIn: [0] },
@@ -93,7 +93,6 @@ export class ProductService {
       .map((category) => (isNaN(+category) ? 0 : +category));
 
     const whereFilters: Prisma.ProductWhereInput = {
-
       category: {
         id: {
           in: categories ? [...serializedCategoriesId] : undefined,
@@ -117,9 +116,8 @@ export class ProductService {
               },
             },
           ],
-        }
-      ]
-      
+        },
+      ],
     };
 
     // console.log(serializedCategoriesId);
@@ -134,7 +132,7 @@ export class ProductService {
         category: true,
         seller: true,
       },
-      where: whereFilters
+      where: whereFilters,
     });
 
     const total = await this._prismaService.product.count({
@@ -177,18 +175,12 @@ export class ProductService {
   }
 
   async updatePathImage(id: number, imagePath: string): Promise<Product> {
-    let product = (await this.findById(id)) as any;
-
-    delete product.id;
-    delete product.category;
-
-    product = {
-      ...product,
-      path_image: `/file/${imagePath}`,
-    };
+    await this.findById(id);
 
     return await this._prismaService.product.update({
-      data: product,
+      data: {
+        path_image: `/file/${imagePath}`,
+      },
       where: { id },
     });
   }

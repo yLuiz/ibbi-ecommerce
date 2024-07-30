@@ -1,10 +1,10 @@
 <p-card class="product-card" [header]="product.name" subheader="{{productInfo.price}} ≈ {{productInfo.price_dollar}}">
     <ng-template pTemplate="header">
-        <div [style]="{ maxWidth: '500px', height: '100px !important'}" >
-            <img [style]="{ width: '100%', height: '100%'}" alt="Card" src="../../../assets/images/product_default.svg" />
+        <div class="flex justify-content-center align-items-center pt-4" [style]="{ maxWidth: '500px', height: '250px !important'}" >
+            <img [style]="{ width: '100%', height: '100%'}" alt="Card" src="{{ product.path_image ? url + product.path_image : '../../../assets/images/product_default.svg' }}" />
         </div>
     </ng-template>
-    <p>
+    <p class="p-description">
         {{
             product.description
         }}
@@ -12,7 +12,7 @@
     <ng-template pTemplate="footer">
         <div class="flex flex-wrap gap-3 mt-1">
             <!-- <p-button label="Cancel" severity="secondary" class="w-full" styleClass="w-full" /> -->
-            <p-button *ngIf="product.seller.id !== 1; else ownProduct" label="Comprar" class="w-full" styleClass="w-full" />
+            <p-button *ngIf="product.seller.id !== userId; else ownProduct" label="Comprar" class="w-full" styleClass="w-full" />
             <ng-template #ownProduct>
                 <p-button [disabled]="true" label="Seu produto" class="w-full" styleClass="w-full" ></p-button>
             </ng-template>

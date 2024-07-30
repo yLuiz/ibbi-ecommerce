@@ -1,41 +1,169 @@
-<form  [formGroup]="productForm" #formDir="ngForm">
-    <div class="surface-ground flex align-items-center justify-content-center overflow-hidden">
-        <div class="flex flex-column align-items-center justify-content-center">
+<form [formGroup]="productForm" #formDir="ngForm">
+  <div
+    class="surface-ground flex align-items-center justify-content-center overflow-hidden"
+  >
+    <div class="flex flex-column align-items-center justify-content-center">
+      <div style="border-radius: 56px; padding: 0.3rem">
+        <div
+          class="w-full surface-card py-8 px-5 sm:px-8"
+          style="border-radius: 53px"
+        >
+          <div class="text-center mb-5">
+            <div class="text-900 text-3xl font-medium mb-3">Novo Produto!</div>
+            <span class="text-600 font-medium"
+              >Preencha as informações do novo produto.</span
+            >
+          </div>
 
-            <div style="border-radius:56px; padding:0.3rem;">
-                <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
-                    <div class="text-center mb-5">
-                        <div class="text-900 text-3xl font-medium mb-3">Novo Produto!</div>
-                        <span class="text-600 font-medium">Preencha as informações do novo produto.</span>
-                    </div>
+          <div>
+            <div class="flex gap-4 flex-wrap w-full">
+              <div>
+                <label
+                  for="name"
+                  class="block text-900 text-xl font-medium mb-2"
+                  >Nome</label
+                >
+                <input
+                  id="name"
+                  formControlName="name"
+                  type="text"
+                  placeholder="Nome"
+                  pInputText
+                  class="w-full md:w-30rem mb-5"
+                  style="padding: 1rem"
+                />
+              </div>
 
-                    <div>
-                        <label for="name" class="block text-900 text-xl font-medium mb-2">Nome</label>
-                        <input id="name" formControlName="name" type="text" placeholder="Nome" pInputText class="w-full md:w-30rem mb-5" style="padding:1rem">
-
-                        <label for="description" class="block text-900 text-xl font-medium mb-2">Descrição</label>
-                        <input id="description" formControlName="description" type="text" placeholder="Descrição do produto" pInputText class="w-full md:w-30rem mb-5" style="padding:1rem">
-
-                        <div class="flex flex-wrap gap-4">
-                            <button [disabled]="isLoading || formDir.invalid" (click)="handleSubmit()" pButton pRipple class="w-full p-3 text-xl">
-                                <span *ngIf="!isLoading; else loading" class="flex align-items-center justify-content-center w-full">
-                                    Salvar
-                                </span>
-                                <ng-template #loading>
-                                    <span class="flex align-items-center justify-content-center w-full"> 
-                                        <i class="pi pi-spin pi-spinner" style="font-size: 2rem; color: #FFF"></i>
-                                    </span>
-                                </ng-template>
-                            </button>
-                            <button (click)="backToList()" [disabled]="isLoading" pButton pRipple class="back-button p-button-outlined p-button-secondary w-full p-3 text-xl">
-                                <span class="w-full">Voltar</span>
-                                <!-- <a [routerLink]="['/products']" class="decoration-none flex align-items-center justify-content-center w-full">
-                                </a> -->
-                            </button>
-                        </div>
-                    </div>
-                </div>
+              <div>
+                <label
+                  for="description"
+                  class="block text-900 text-xl font-medium mb-2"
+                  >Descrição</label
+                >
+                <input
+                  id="description"
+                  formControlName="description"
+                  type="text"
+                  placeholder="Descrição do produto"
+                  pInputText
+                  class="w-full md:w-30rem mb-5"
+                  style="padding: 1rem"
+                />
+              </div>
             </div>
+
+            <div class="flex gap-4 flex-wrap">
+              <div>
+                <label
+                  for="category"
+                  class="block text-900 text-xl font-medium mb-2"
+                  >Categoria</label
+                >
+                <p-dropdown
+                  [options]="categories"
+                  [optionLabel]="'name'"
+                  [optionValue]="'id'"
+                  formControlName="category"
+                  optionLabel="name"
+                  placeholder="Selecione a categoria"
+                  class="w-full md:w-30rem mb-5 flex-grow-1"
+                  [style]="{
+                    minWidth: '220px',
+                    width: '100%',
+  
+                  }"
+                />
+              </div>
+              <div>
+                <label
+                  for="price"
+                  class="block text-900 text-xl font-medium mb-2"
+                  >Preço</label
+                >
+                <p-inputNumber
+                  formControlName="price"
+                  inputId="price"
+                  mode="currency"
+                  currency="BRL"
+                  locale="pt-BR"
+                  class="w-full md:w-30rem mb-5"
+                  [style]="{
+                    maxWidth: '220px',
+                    width: '100%',
+                  }"
+                />
+              </div>
+              <div>
+                <label
+                  for="stock"
+                  class="block text-900 text-xl font-medium mb-2"
+                  >Estoque do produto</label
+                >
+                <input
+                  id="stock"
+                  formControlName="stock"
+                  type="number"
+                  placeholder="Estoque do produto"
+                  pInputText
+                  class="w-full md:w-30rem mb-5"
+                  style="padding: 1rem"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="image" class="block text-900 text-xl font-medium mb-2"
+                >Imagem</label
+              >
+              <input
+                id="image"
+                type="file"
+                placeholder="Imagem do produto"
+                pInputText
+                class="w-full md:w-30rem mb-5"
+                style="padding: 1rem"
+                (change)="onUpload($event)"
+              />
+            </div>
+
+            <div class="flex flex-wrap gap-4">
+              <button
+                [disabled]="isLoading || formDir.invalid"
+                (click)="handleSubmit()"
+                pButton
+                pRipple
+                class="w-full p-3 text-xl"
+              >
+                <span
+                  *ngIf="!isLoading; else loading"
+                  class="flex align-items-center justify-content-center w-full"
+                >
+                  Salvar
+                </span>
+                <ng-template #loading>
+                  <span
+                    class="flex align-items-center justify-content-center w-full"
+                  >
+                    <i
+                      class="pi pi-spin pi-spinner"
+                      style="font-size: 2rem; color: #fff"
+                    ></i>
+                  </span>
+                </ng-template>
+              </button>
+              <button
+                (click)="backToList()"
+                [disabled]="isLoading"
+                pButton
+                pRipple
+                class="back-button p-button-outlined p-button-secondary w-full p-3 text-xl"
+              >
+                <span class="w-full">Voltar</span>
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </form>

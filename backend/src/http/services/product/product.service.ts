@@ -3,12 +3,12 @@ import { Prisma, Product } from '@prisma/client';
 import { PrismaService } from 'src/db/prisma/prisma.service';
 import { CreateProductDTO } from 'src/shared/dtos/input/CreateProductDTO';
 import { UpdateProductDTO } from 'src/shared/dtos/input/UpdateProductDTO';
+import { IPaginationData } from 'src/shared/interfaces/IPaginationData';
 import { IPaginationQuery } from 'src/shared/interfaces/IPaginationQuery';
 import { IProductFilter } from 'src/shared/interfaces/IProductFilter';
 import { MESSAGE } from 'src/shared/messages';
 import { CategoryService } from '../category/category.service';
 import { UserService } from '../user/user.service';
-import { IPaginationData } from 'src/shared/interfaces/IPaginationData';
 
 @Injectable()
 export class ProductService {
@@ -65,6 +65,9 @@ export class ProductService {
         category: true,
         seller: true,
       },
+      orderBy: {
+        id: 'desc'
+      },
       where: {
         stock: { notIn: [0] },
       },
@@ -90,31 +93,34 @@ export class ProductService {
       .map((category) => (isNaN(+category) ? 0 : +category));
 
     const whereFilters: Prisma.ProductWhereInput = {
+
       category: {
         id: {
-          in: [...serializedCategoriesId],
+          in: categories ? [...serializedCategoriesId] : undefined,
         },
       },
-      name: {
-        contains: name,
-      },
-      description: {
-        contains: description,
-      },
+
       stock: {
         notIn: nostock === 'true' ? undefined : [0],
       },
+      AND: [
+        {
+          OR: [
+            {
+              name: {
+                contains: name,
+              },
+            },
+            {
+              description: {
+                contains: description,
+              },
+            },
+          ],
+        }
+      ]
+      
     };
-
-    let realFilter: Prisma.ProductWhereInput = {};
-    Object.keys(filters).forEach((key) => {
-      key = key === 'categories' ? 'category' : key;
-
-      realFilter = {
-        ...realFilter,
-        [key]: whereFilters[key],
-      };
-    });
 
     // console.log(serializedCategoriesId);
 
@@ -128,11 +134,11 @@ export class ProductService {
         category: true,
         seller: true,
       },
-      where: realFilter,
+      where: whereFilters
     });
 
     const total = await this._prismaService.product.count({
-      where: realFilter,
+      where: whereFilters,
     });
 
     return {

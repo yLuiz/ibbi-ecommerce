@@ -64,6 +64,7 @@ export class ProductService {
     const products = await this._prismaService.product.findMany({
       skip: offset || 0,
       take: +query.take,
+
       include: {
         category: true,
         seller: true,
@@ -73,6 +74,9 @@ export class ProductService {
       },
       where: {
         stock: { notIn: [0] },
+        delete: {
+          not: 1,
+        },
       },
     });
 
@@ -110,12 +114,19 @@ export class ProductService {
         },
       },
 
-      seller: seller || noseller ? {
-        id: {
-          in: seller ? [+seller] : undefined,
-          notIn: noseller ? [+noseller] : undefined,
-        },
-      } : undefined,
+      delete: {
+        not: 1,
+      },
+
+      seller:
+        seller || noseller
+          ? {
+              id: {
+                in: seller ? [+seller] : undefined,
+                notIn: noseller ? [+noseller] : undefined,
+              },
+            }
+          : undefined,
 
       stock: {
         notIn: nostock === 'true' ? undefined : [0],
@@ -168,7 +179,12 @@ export class ProductService {
 
   async findById(id: number): Promise<Product> {
     const product = await this._prismaService.product.findFirst({
-      where: { id },
+      where: {
+        id,
+        delete: {
+          not: 1,
+        },
+      },
       include: {
         category: true,
         seller: true,
@@ -207,11 +223,18 @@ export class ProductService {
   }
 
   async delete(id: number): Promise<Product> {
+    // Error de implementação.
+    // O produto não pode ser apagado depois de uma venda,
+    // pois há uma relação entre venda e produto, ocasionando conflito no banco de dados.
+
     // Verifica se o produto existe, caso não exista, a própria função irá lançar uma HttpException.
     await this.findById(id);
 
-    return this._prismaService.product.delete({
+    return this._prismaService.product.update({
       where: { id },
+      data: {
+        delete: 1,
+      },
     });
   }
 }

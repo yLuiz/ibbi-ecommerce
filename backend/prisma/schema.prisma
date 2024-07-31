@@ -37,6 +37,7 @@ model Product {
   stock          Int
   category_id    Int
   seller_id      Int
+  delete         Int        @default(0)
   sales_quantity Int        @default(0)
   category       Category   @relation(fields: [category_id], references: [id])
   seller         User       @relation(fields: [seller_id], references: [id])

@@ -58,8 +58,11 @@ export class ProductService {
   }
 
   async findAll(query: IPaginationQuery): Promise<IPaginationData<Product[]>> {
+    
+    const offset = query.skip === 0 ? query.take : query.skip * query.take; 
+
     const products = await this._prismaService.product.findMany({
-      skip: +query.skip,
+      skip: offset,
       take: +query.take,
       include: {
         category: true,
@@ -122,8 +125,10 @@ export class ProductService {
 
     // console.log(serializedCategoriesId);
 
+    const offset = query.skip === 0 ? query.take : query.skip * query.take; 
+
     const products = await this._prismaService.product.findMany({
-      skip: +query.skip,
+      skip: offset,
       take: +query.take,
       orderBy: {
         id: query.order.toLowerCase() as 'asc' | 'desc',

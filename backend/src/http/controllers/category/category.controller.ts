@@ -54,7 +54,8 @@ export class CategoryController {
         try {
             const { skip, take } = query;
 
-            if (!skip || !take) {
+            if (!skip && skip !== 0  || !take) {
+
                 query = { skip: 0, take: 10 }
             }
 

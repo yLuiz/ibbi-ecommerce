@@ -51,9 +51,11 @@ export class UserService {
 
         const { skip, take } = query;
 
+        const offset = query.skip === 0 ? query.take : query.skip * query.take;
+
         const users = await this._prismaService.user.findMany({
             take: +take,
-            skip: +skip,
+            skip: offset,
             select: {
                 id: true,
                 name: true,
@@ -91,9 +93,11 @@ export class UserService {
             }
         });
 
+        const offset = query.skip === 0 ? query.take : query.skip * query.take;
+
         const users = await this._prismaService.user.findMany({
             take: +take,
-            skip: +skip,
+            skip: offset,
             orderBy: {
                 id: query.order.toLowerCase() as 'asc' | 'desc'
             },

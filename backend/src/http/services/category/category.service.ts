@@ -29,8 +29,10 @@ export class CategoryService {
 
     async findAll(query: IPaginationQuery): Promise<IPaginationData<Category[]>> {
 
+        const offset = query.skip === 0 ? query.take : query.skip * query.take; 
+
         const categories = await this._prismaService.category.findMany({
-            skip: +query.skip,
+            skip: offset,
             take: +query.take,
         });
 

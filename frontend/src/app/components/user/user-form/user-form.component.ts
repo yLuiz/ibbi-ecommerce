@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ICreateUser } from '../../../shared/interfaces/models/ICreateUser';
 import { IUser } from '../../../shared/interfaces/models/IUser';
+import { MessageService } from 'primeng/api';
+import { ToastSeverity } from '../../../shared/types/ToastSeverity';
 
 @Component({
   selector: 'app-user-form',
@@ -15,7 +17,9 @@ export class UserFormComponent {
   userForm!: FormGroup;
   @Input() isLoading: boolean = false;
 
-  constructor() {
+  constructor(
+    private _messageService: MessageService
+  ) {
     this.userForm = new FormGroup({
       name: new FormControl(this.user?.name || '', [
         Validators.required,
@@ -33,6 +37,18 @@ export class UserFormComponent {
   }
 
   handleSubmit(): void {
+
+    if (this.password?.value !== this.confirmedPassword?.value) {
+      this._messageService.add({
+        key: 'userform-tst',
+        severity: ToastSeverity.ERROR,
+        summary: 'Formulário inválido',
+        detail: 'As senhas não coincidem.',
+      })
+
+      return;
+    }
+
     const newUser: ICreateUser = {
       name: this.name?.value,
       email: this.email?.value,

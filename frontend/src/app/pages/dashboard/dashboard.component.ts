@@ -26,6 +26,7 @@ export class DashboardComponent {
   // DOUGHNUT
   doughnutData?: IData;
   options?: IBasicOptions;
+  totalSalesCategory?: number;
 
   constructor(
     private _purchaseService: PurchaseService,
@@ -178,6 +179,8 @@ export class DashboardComponent {
   getPurrchasesByCategory() {
     return this._purchaseService.listPurchaseGroupByCategory().subscribe({
       next: (response) => {
+
+        this.totalSalesCategory = response.total;
         const categories = response.content;
         const categoriesName = categories.map((category) => `${category.name}(${category.sales_quantity})`);
         const purchasesQuantity = categories.map(

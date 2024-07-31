@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this._messageService.add({
-            key: 'tst',
+            key: 'login-tst',
             severity: ToastSeverity.SUCCESS,
             summary: 'Sucesso',
             detail: 'Login efetuado com sucesso.',
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy {
               : response.error.message.at(0);
 
           this._messageService.add({
-            key: 'tst',
+            key: 'login-tst',
             severity: 'error',
             summary: 'Erro',
             detail: errorMessage,
@@ -80,16 +80,17 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Aqui utilizei o type generico "any".
-    // Pois o typescript não permitiu fazer calculo com tipo data, mesmo que o JS permita.
     const now = new Date();
-    // const diffTime = Math.abs((<any>quotation?.lastUpdate) - now);
     const diffTime = Math.abs(
       quotation!.lastUpdate.getMilliseconds() - now.getMilliseconds()
     );
     const diffMin = Math.floor(diffTime / 60000);
 
     if (diffMin > 10) this.getDollarQuotation();
+  }
+
+  forgotPassword() {
+    this._messageService.add({ severity: ToastSeverity.WARN, summary: 'Funcionalidade ainda não implementada.', key: 'login-tst'});
   }
 
   getDollarQuotation() {

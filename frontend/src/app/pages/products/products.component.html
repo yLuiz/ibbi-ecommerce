@@ -31,7 +31,7 @@
         Pesquisar
       </p-button>
     </div>
-    <div class="p-toolbar-group-end gap-4">
+    <div class="p-toolbar-group-end gap-4 flex-wrap">
       <p-button [severity]="isMyProductsActive ? 'success' : 'secondary'" (onClick)="toggleMyProducts()">
 
         <span *ngIf="!isMyProductsActive; else my_product_button">

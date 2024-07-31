@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this._loginSubscription = this._userService.register(newUser)
             .subscribe({
                 next: (response) => {
-                    this._messageService.add({ key: 'tst', severity: ToastSeverity.SUCCESS, summary: 'Sucesso', detail: 'Cadastro efetuado com sucesso.' });
+                    this._messageService.add({ key: 'register-tst', severity: ToastSeverity.SUCCESS, summary: 'Sucesso', detail: 'Cadastro efetuado com sucesso.' });
                     this._authenticate({
                         email: newUser.email,
                         password: newUser.password
@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
                     const errorMessage = typeof response.error.message === 'string' ? response.error.message : response.error.message.at(-1);
 
-                    this._messageService.add({ key: 'tst', severity: 'error', summary: 'Erro', detail: errorMessage });
+                    this._messageService.add({ key: 'register-tst', severity: 'error', summary: 'Erro', detail: errorMessage });
                     this.isLoading = false;
                 }
             })
@@ -71,7 +71,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
                     console.error(response);
                     const errorMessage = typeof response.error.message === 'string' ? response.error.message : response.error.message.at(-1);
 
-                    this._messageService.add({ key: 'tst', severity: 'error', summary: 'Erro', detail: errorMessage });
+                    this._messageService.add({ key: 'register-tst', severity: 'error', summary: 'Erro', detail: errorMessage });
                 }
             })
     }

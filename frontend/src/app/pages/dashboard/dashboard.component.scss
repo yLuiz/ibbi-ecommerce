@@ -1,3 +1,43 @@
 .chart-card {
-    min-width: 300px;
+  min-width: 300px;
+}
+
+.dashboard-section {
+  .lastests-purchase-table {
+  }
+  .charts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    .doughnut-chart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+      height: 500px;
+      max-width: 900px;
+      overflow-x: auto;
+      height: 500px;
+      flex-grow: 1;
+      order: 1;
+
+      .content {
+        max-width: 400px;
+        min-width: 200px;
+      }
+    }
+
+    .bar-chart {
+      overflow-x: auto;
+      max-width: 900px;
+      height: 500px;
+      flex-grow: 1;
+      order: 2;
+
+      .content {
+        min-width: 600px;
+      }
+    }
+  }
 }

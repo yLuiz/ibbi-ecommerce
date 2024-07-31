@@ -11,7 +11,7 @@
 
 
     <div #topbarmenu class="layout-topbar-menu flex align-items-center">
-        <p class="m-0 p-0">{{ username }}</p>
+        <p class="m-0 p-0 username">{{ username }}</p>
         <p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
         <button class="p-link layout-topbar-button flex flex-column" (click)="menu.toggle($event)">
             <i class="pi pi-user"></i>

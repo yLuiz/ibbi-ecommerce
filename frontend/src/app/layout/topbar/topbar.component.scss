@@ -1,0 +1,33 @@
+.layout-topbar-logo {
+  @media (max-width: 480px) {
+    display: flex;
+
+    span {
+      text-align: center;
+      font-size: 1.2rem !important;
+    }
+  }
+
+  @media (max-width: 340px) {
+    display: flex;
+
+    span {
+      text-align: center;
+      font-size: 0.9rem !important;
+    }
+  }
+}
+
+.layout-topbar-menu {
+  @media (max-width: 480px) {
+    .username {
+      font-size: 1.2rem !important;
+    }
+  }
+
+  @media (max-width: 340px) {
+    .username {
+      font-size: 0.9rem !important;
+    }
+  }
+}

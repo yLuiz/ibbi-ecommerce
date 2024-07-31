@@ -30,7 +30,7 @@ FROM nginx:1.25.3-alpine-slim
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy the build output to Nginx's HTML directory
-COPY --from=build /app/dist/frontend /usr/share/nginx/html
+COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
 
 # Expose port 4200
 EXPOSE 4200

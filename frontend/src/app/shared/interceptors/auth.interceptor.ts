@@ -18,6 +18,7 @@ export class AuthInterceptor implements HttpInterceptor {
         catchError((error: HttpErrorResponse) => {
           if (error.status === 401) {
             // Redirecionar para a página de login
+            localStorage.clear();
             this._router.navigate(['/auth']);
           } 
           return throwError(() => error);

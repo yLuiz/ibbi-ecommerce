@@ -6,6 +6,9 @@ import { ICategory } from '../../shared/interfaces/models/ICategory';
 import { ICreateProduct } from '../../shared/interfaces/models/ICreateProduct';
 import { IProduct } from '../../shared/interfaces/models/IProduct';
 import { DollarQuotationService } from '../../services/dollar-quotation.service';
+import { IPagination } from '../../shared/interfaces/api/IPagination';
+import { PaginatorState } from 'primeng/paginator';
+import { AuthService } from '../../services/auth.service';
 
 export interface IProductFormSubmit {
   productJSON: ICreateProduct;
@@ -27,15 +30,24 @@ export class ProductsComponent {
   constructor(
     private _productService: ProductService,
     private _categoryService: CategoryService,
-    private _dollarQuotationService: DollarQuotationService
-  ) {}
-
-  isAddingNewProduct = false;
-  nameOrDescription?: string;
-
-  toggleAddProduct() {
-    this.isAddingNewProduct = !this.isAddingNewProduct;
+    private _dollarQuotationService: DollarQuotationService,
+    private _authService: AuthService
+  ) {
+    this.rows = 5;
+    this.pagination = {
+      skip: 0,
+      take: this.rows,
+    };
   }
+
+  totalItems: number = 0;
+  rows: number;
+  categories: ICategory[] = [];
+  selectedCategories: ICategory[] = [];
+  products: IProduct[] = [];
+  isAddingNewProduct = false;
+  isMyProductsActive = false;
+  nameOrDescription?: string;
 
   items: any[] = [
     {
@@ -48,15 +60,31 @@ export class ProductsComponent {
     },
   ];
 
-  categories: ICategory[] = [];
+  pagination: IPagination;
 
-  selectedCategories: ICategory[] = [];
+  toggleAddProduct() {
+    this.isAddingNewProduct = !this.isAddingNewProduct;
+  }
 
-  products: IProduct[] = [];
+  toggleMyProducts() {
+    this.isMyProductsActive = !this.isMyProductsActive;
+    this.resetFilters();
+    this.getProducts();
+  }
 
   ngOnInit() {
     this.getProducts();
     this.updateQuotation();
+  }
+
+  changePage(event: PaginatorState) {
+    this.pagination.skip = event.page || 0;
+    this.getProducts();
+  }
+
+  resetFilters() {
+    this.selectedCategories = [];
+    this.nameOrDescription = undefined;
   }
 
   search() {
@@ -114,17 +142,30 @@ export class ProductsComponent {
   }
 
   getProducts(filters?: IProductFilter) {
+    if (this.isMyProductsActive) {
+      filters = {
+        ...filters,
+        noseller: undefined,
+        seller: this._authService.decodePayloadJWT()?.sub,
+      };
+      delete filters.noseller;
+
+    } else {
+      filters = {
+        ...filters,
+        seller: undefined,
+        noseller: this._authService.decodePayloadJWT()?.sub,
+      };
+
+      delete filters.seller;
+    }
+
     this._productService
-      .listAll(
-        {
-          skip: 0,
-          take: 10,
-        },
-        filters
-      )
+      .listAll(this.pagination, filters)
       .subscribe({
         next: (response) => {
           this.products = [...response.content];
+          this.totalItems = response.total || 0;
         },
         error: (error) => console.error(error),
       })

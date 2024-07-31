@@ -1,5 +1,8 @@
-<ng-container *ngIf="isAddingNewProduct; else listProducts" >
-  <app-product-form (onSubmit)="createProduct($event)" (onBack)="toggleAddProduct()" ></app-product-form>
+<ng-container *ngIf="isAddingNewProduct; else listProducts">
+  <app-product-form
+    (onSubmit)="createProduct($event)"
+    (onBack)="toggleAddProduct()"
+  ></app-product-form>
 </ng-container>
 
 <ng-template #listProducts>
@@ -7,10 +10,15 @@
     <div class="p-toolbar-group-center">
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
-        <input (keydown.enter)="search()" [(ngModel)]="nameOrDescription" pInputText placeholder="Pesquisar" />
+        <input
+          (keydown.enter)="search()"
+          [(ngModel)]="nameOrDescription"
+          pInputText
+          placeholder="Pesquisar"
+        />
       </span>
     </div>
-    <div class="flex  gap-4 flex-wrap">
+    <div class="flex gap-4 flex-wrap">
       <p-multiSelect
         [options]="categories"
         [(ngModel)]="selectedCategories"
@@ -24,21 +32,37 @@
       </p-button>
     </div>
     <div class="p-toolbar-group-end gap-4">
-  
+      <p-button [severity]="isMyProductsActive ? 'success' : 'secondary'" (onClick)="toggleMyProducts()">
+
+        <span *ngIf="!isMyProductsActive; else my_product_button">
+          <i class="pi pi-objects-column mr-2"></i>
+          Meus Produtos
+        </span>
+
+        <ng-template #my_product_button>
+          <span>
+            <i class="pi pi-cart-plus "></i>
+            Comprar Produtos 
+          </span>
+        </ng-template>
+      </p-button>
       <p-button (onClick)="toggleAddProduct()">
-        <i class="pi pi-objects-column mr-2"></i>
+        <i class="pi pi-plus mr-2"></i>
         Adicionar Produto
       </p-button>
     </div>
   </p-toolbar>
 
-  <ul class="flex gap-4 flex-wrap">
-    <li type="none" *ngFor="let product of products">
-      <app-product-card [product]="product"></app-product-card>
-    </li>
-  </ul>
+  <div class="card">
+    <ul class="flex gap-4 flex-wrap">
+      <li type="none" *ngFor="let product of products">
+        <app-product-card [product]="product"></app-product-card>
+      </li>
+    </ul>
+    <p-paginator
+      [totalRecords]="totalItems"
+      [rows]="rows"
+      (onPageChange)="changePage($event)"
+    ></p-paginator>
+  </div>
 </ng-template>
-
-
-
-

@@ -16,7 +16,7 @@
             <p-button (onClick)="goToPurchase()" *ngIf="product.seller.id !== userId; else ownProduct" label="Comprar" class="w-full newpurchase-link" styleClass="w-full" >
             </p-button>
             <ng-template #ownProduct>
-                <p-button [disabled]="true" label="Seu produto" class="w-full" styleClass="w-full">
+                <p-button [disabled]="true" label="Editar" class="w-full" styleClass="w-full">
                 </p-button>
             </ng-template>
             

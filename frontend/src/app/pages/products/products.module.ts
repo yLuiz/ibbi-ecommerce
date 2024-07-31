@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   declarations: [ProductsComponent],
@@ -24,6 +25,7 @@ import { FormsModule } from '@angular/forms';
     InputTextModule,
     MultiSelectModule,
     DialogModule,
+    PaginatorModule
   ],
 })
 export class ProductsModule {}

@@ -5,11 +5,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { LayoutModule } from './layout/layout.module';
 import { PagesModule } from './pages/pages.module';
 import { ServicesModule } from './services/services.module';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
-import { LayoutModule } from './layout/layout.module';
-import { ComponentsModule } from './components/components.module';
 
 @NgModule({
   declarations: [

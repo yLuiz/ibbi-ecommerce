@@ -26,7 +26,7 @@
           <label class="block text-900 text-xl font-medium">Valor</label>
           <p>
             {{ product.price | currency : "BRL" }} ≈
-            {{ product.price * 5 | currency : "USD" }}
+            {{ product.price * dollar | currency : "USD" }}
           </p>
         </div>
       </ng-container>

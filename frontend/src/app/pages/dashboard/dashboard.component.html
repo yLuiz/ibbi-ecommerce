@@ -1,0 +1,31 @@
+<div class="chart-card card w-5 overflow-hidden">
+    <p-chart type="doughnut" [data]="data" [options]="options" />
+</div>
+<div class="card w-10">
+    <p-chart *ngIf="basicData.labels.length" type="bar" [data]="basicData" [options]="basicOptions" />
+</div>
+<div class="card w-10">
+    <p-table *ngIf="latestsPurchases.length" [value]="latestsPurchases" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Data de Venda</th>
+                <th>Horário</th>
+                <th>Descrição do produto</th>
+                <th>Cliente</th>
+                <th>Vendedor</th>
+                <th>Observação</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-purchase>
+            <tr>
+                <td>{{ purchase.created_at | date }}</td>
+                <td>{{ purchase.created_at | date:'hh:mm a' }}</td>
+                <td>{{ purchase.product.description }}</td>
+                <td>{{ purchase.client.name }}</td>
+                <td>{{ purchase.seller.name }}</td>
+                <td>{{ purchase.observation || '—' }}</td>
+
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

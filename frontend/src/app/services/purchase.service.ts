@@ -8,6 +8,8 @@ import { IPagination } from '../shared/interfaces/api/IPagination';
 import { IPurchaseFilter } from '../shared/interfaces/api/IPurchaseFilter';
 import { ITopProduct } from '../shared/interfaces/models/IProduct';
 import { ISalesByCategory } from '../shared/interfaces/models/ICategory';
+import io from 'socket.io-client';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +17,10 @@ import { ISalesByCategory } from '../shared/interfaces/models/ICategory';
 export class PurchaseService {
 
   constructor(
-    private _http: HttpClient
+    private _http: HttpClient,
   ) { }
 
+  private socket = io(environment.socketUrl);
 
   create(newPurchase: ICreatePurchase) {
     return this._http.post<IResponseEntity<IPurchaseCreated>>(`${environment.apiUrl}/purchase`, newPurchase);
@@ -56,5 +59,15 @@ export class PurchaseService {
 
   listPurchaseGroupByCategory() {
     return this._http.get<IResponseEntity<ISalesByCategory[]>>(`${environment.apiUrl}/purchase/category`);
+  }
+
+
+  listenNewPurchase() {
+    return new Observable((observer) => {
+      this.socket.on('new-purchase', (purchase: IPurchase) => {
+        observer.next(purchase);
+      });
+    });
+    
   }
 }

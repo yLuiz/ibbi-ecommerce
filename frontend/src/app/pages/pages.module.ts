@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import { PurchaseModule } from './purchase/purchase.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 
 
@@ -13,7 +14,8 @@ import { PurchaseModule } from './purchase/purchase.module';
     CommonModule,
     AuthModule,
     ProductsModule,
-    PurchaseModule
+    PurchaseModule,
+    DashboardModule
   ],
 })
 export class PagesModule { }

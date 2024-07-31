@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment.development';
 import { AuthService } from '../../../services/auth.service';
 import { IProduct } from '../../../shared/interfaces/models/IProduct';
+import { DollarQuotationService } from '../../../services/dollar-quotation.service';
 
 interface IProductInfo extends Omit<IProduct, 'price'> {
   price: string;
@@ -23,6 +24,7 @@ export class ProductCardComponent {
   constructor(
     private _authService: AuthService,
     private _router: Router,
+    private _dollarQuotationService: DollarQuotationService
   ) {}
   
   goToPurchase() {
@@ -30,12 +32,14 @@ export class ProductCardComponent {
   }
 
   ngOnInit() {
+    const dollar = this._dollarQuotationService.getSavedQuotation()?.quotation || 1;
+
     this.userId = this._authService.decodePayloadJWT()?.sub;
 
     this.productInfo = {
       ...this.product,
       price: `R$${this.product.price.toFixed(2).replace('.', ',')}`,
-      price_dollar: `$${(this.product.price * 5).toFixed(2)}`,
+      price_dollar: `$${(this.product.price * dollar).toFixed(2)}`,
     };
   }
 }

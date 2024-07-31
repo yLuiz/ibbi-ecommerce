@@ -9,6 +9,7 @@ import { IErrorResponse } from '../../../shared/interfaces/api/IErrorResponse';
 import { ProductService } from '../../../services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment.development';
+import { DollarQuotationService } from '../../../services/dollar-quotation.service';
 
 enum QuantityStatusMessage {
   GOOD = 'Quantidade disponível.',
@@ -34,7 +35,8 @@ export class NewPurchaseComponent {
 
   isLoading = false;
 
-  totalPrice: number = 0;
+  totalPrice = 0;
+  dollar = 1;
 
   status: IQuantityStatus = {
     severity: 'success',
@@ -47,7 +49,8 @@ export class NewPurchaseComponent {
     private _authService: AuthService,
     private _messageService: MessageService,
     private _router: Router,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _dollarQuotationService: DollarQuotationService
   ) {
     this.purchaseForm = new FormGroup({
       quantity: new FormControl(1, [Validators.required, Validators.min(1)]),
@@ -55,7 +58,6 @@ export class NewPurchaseComponent {
     });
 
     this.url = environment.apiUrl;
-    console.log(this.url + this.product?.path_image);
   }
 
   purchaseForm!: FormGroup;
@@ -122,7 +124,6 @@ export class NewPurchaseComponent {
     this._productService.listById(id!).subscribe({
       next: (response) => {
         this.product = { ...response.content };
-        console.log(this.product);
 
         this.totalPrice = this.product!.price;
       },
@@ -142,6 +143,9 @@ export class NewPurchaseComponent {
 
       this.purchaseForm.updateValueAndValidity();
     });
+
+    this.dollar = this._dollarQuotationService.getSavedQuotation()?.quotation || 1;
+
   }
 
   getStatus(value: number): IQuantityStatus {

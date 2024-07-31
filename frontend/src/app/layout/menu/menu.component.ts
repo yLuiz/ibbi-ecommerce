@@ -35,7 +35,7 @@ export class MenuComponent implements OnInit {
             {
                 label: 'Menu',
                 items: [
-                    { label: 'Dashboard', icon: 'pi pi-fw pi-chart-pie', routerLink: ['/'] },
+                    { label: 'Dashboard', icon: 'pi pi-fw pi-chart-pie', routerLink: ['/dashboard'] },
                     { label: 'Produtos', icon: 'pi pi-fw pi-objects-column', routerLink: ['/products'] },
 
                 ]

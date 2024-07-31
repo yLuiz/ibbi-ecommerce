@@ -2,6 +2,14 @@
 
 Sistema com fluxo de E-commerce, sugerido como teste técnico pelo IBBI
 
+# 🗃 Baixando o repositório
+Para baixar e executar o sistema, faça download com os seguintes comandos:
+
+``` bash
+    git clone -b main https://github.com/yLuiz/ibbi-ecommerce.git
+    cd ./ibbi-ecommerce
+```
+
 # 🖼 Front-end
 
 ## 💻 Tecnologias
@@ -19,11 +27,18 @@ $ npm install
 ```
 * Obs: Vale lembrar que o Backend precisa está configurado e ligado para a aplicação funcionar
 
-## 🚀 Executando
+## 🚀 Executando (Sem o Docker)
 Após a instalação das dependências, execute o seguinte comando:
 
 ``` bash
 $ npm start
+```
+
+## 🚀 Executando (Com o Docker)
+Caso não queira ter problemas com ambiente, rode apenas o seguinte comando docker:
+
+``` bash
+$ docker-compose up -d
 ```
 
 Depois é só acessar em sua máquina o seguinte endereço: `http://localhost:4200/`
@@ -41,6 +56,12 @@ Depois é só acessar em sua máquina o seguinte endereço: `http://localhost:42
 Para conseguir rodar o Backe-end, você precisa ter instalado o Node.js na versão 20.16.0 em sua máquina.
 Após isso, clone o repositório e entre na pasta `./backend` e execute os seguintes passos:
 
+- Primeiramente, verifique o arquivo .env da sua aplicação, ele deve contar duas variaveis:
+``` bash
+    DATABASE_URL="mysql://user:password@localhost:3306/your_databse?createDatabaseIfNotExist=true&schema=public"
+    JWT_SECRET="your_secret_key
+```
+
 - Rode o comando:
 ``` bash
     $ npm install
@@ -52,17 +73,26 @@ Após isso, clone o repositório e entre na pasta `./backend` e execute os segui
 ```
 
 - Após o comando executar com sucesso, execute o próximo comando:
-    ``` bash
-    $ npx prisma generate
-    ```
+``` bash
+$ npx prisma generate
+```
+- Feito os passos para executar o banco, agora é necessário popular alguns dados de Categoria, então rode o seguinte comando:
+ ``` bash
+$ npm run seed
+```
 
-
-## 🚀 Executando
+## 🚀 Executando (Sem o Docker)
 Após a configurção, execute o seguinte comando:
 
 ``` bash
 $ npm run start:dev
+```
 
+## 🚀 Executando (Com o Docker)
+Caso não queira ter problemas com ambiente, rode apenas o seguinte comando docker:
+
+``` bash
+$ docker-compose up -d
 ```
 
 ## 🔀 Rotas

@@ -7,11 +7,13 @@ import { CategoryService } from '../../../services/category.service';
 import { AuthService } from '../../../services/auth.service';
 import { IProductFormSubmit } from '../../../pages/products/products.component';
 import { FileUploadEvent } from 'primeng/fileupload';
+import { MessageService } from 'primeng/api';
+import { ToastSeverity } from '../../../shared/types/ToastSeverity';
 
 @Component({
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
-  styleUrl: './product-form.component.scss'
+  styleUrl: './product-form.component.scss',
 })
 export class ProductFormComponent {
   @Input() product?: IProduct;
@@ -19,10 +21,12 @@ export class ProductFormComponent {
   @Output() onBack: EventEmitter<'back'> = new EventEmitter();
 
   productImage?: File;
+  pathImage?: string;
 
   constructor(
     private _categoriesService: CategoryService,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _messageService: MessageService
   ) {
     this.productForm = new FormGroup({
       name: new FormControl(this.product?.name || '', [
@@ -30,33 +34,38 @@ export class ProductFormComponent {
         Validators.minLength(3),
         Validators.maxLength(255),
       ]),
-      description: new FormControl(this.product?.description || '', [Validators.required]),
-      category: new FormControl(this.product?.category || '', [Validators.required]),
-      price: new FormControl(this.product?.description || '', [Validators.required]),
-      stock: new FormControl(this.product?.description || '', [Validators.required]),
-
+      description: new FormControl(this.product?.description || '', [
+        Validators.required,
+      ]),
+      category: new FormControl(this.product?.category || '', [
+        Validators.required,
+      ]),
+      price: new FormControl(this.product?.description || '', [
+        Validators.required,
+      ]),
+      stock: new FormControl(this.product?.description || '', [
+        Validators.required,
+      ]),
     });
   }
-  
+
   categories: ICategory[] = [];
 
   productForm!: FormGroup;
   @Input() isLoading: boolean = false;
-  
 
   backToList() {
     this.onBack.emit('back');
   }
 
   onUpload(event: Event) {
-    
     const files = (<HTMLInputElement>event.target).files;
     this.productImage = files ? files[0] : undefined;
-    
+
+    this.pathImage = URL.createObjectURL(this.productImage as File);
   }
 
   handleSubmit(): void {
-
     const tokenPayload = this._authService.decodePayloadJWT();
 
     const newProduct: ICreateProduct = {
@@ -67,9 +76,17 @@ export class ProductFormComponent {
       stock: +this.stock?.value,
       seller_id: tokenPayload!.sub,
     };
-    
 
-    if (!this.productImage) {
+    const isValidImage = this.productImage?.type.split('/')[0] === 'image';
+
+    if (!this.productImage || !isValidImage) {
+      this._messageService.add({
+        key: 'productform-tst',
+        severity: ToastSeverity.ERROR,
+        summary: 'Formulário inválido.',
+        detail: 'Por favor, envie uma imagem.',
+      });
+
       return;
     }
 
@@ -81,12 +98,9 @@ export class ProductFormComponent {
 
   ngOnInit() {
     this._categoriesService.listAll().subscribe((categories) => {
-      this.categories = [
-        ...categories.content
-      ];
+      this.categories = [...categories.content];
     });
   }
-
 
   get name() {
     return this.productForm.get('name');

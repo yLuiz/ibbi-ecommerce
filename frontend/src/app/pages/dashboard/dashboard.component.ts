@@ -8,6 +8,7 @@ import { IPurchase } from '../../shared/interfaces/models/IPurchase';
 import { IColumnData } from '../../shared/interfaces/chartsjs/IColumnData';
 import { MessageService } from 'primeng/api';
 import { ToastSeverity } from '../../shared/types/ToastSeverity';
+import { IErrorResponse } from '../../shared/interfaces/api/IErrorResponse';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,10 +16,9 @@ import { ToastSeverity } from '../../shared/types/ToastSeverity';
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
-
   // TABLE
   latestsPurchases: IPurchase[] = [];
-  
+
   // COLUMN
   columnData?: IColumnData;
   basicOptions?: IBasicOptions;
@@ -28,16 +28,20 @@ export class DashboardComponent {
   options?: IBasicOptions;
   totalSalesCategory?: number;
 
+  isLoading = true;
+
   constructor(
     private _purchaseService: PurchaseService,
-    private _messageService: MessageService,
+    private _messageService: MessageService
   ) {}
 
   ngOnInit() {
     // Pega o arquivo de estilo e obtém as propriedades de váriveis via JavaScript
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+    const textColorSecondary = documentStyle.getPropertyValue(
+      '--text-color-secondary'
+    );
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     // DOUGHNUT
@@ -131,91 +135,162 @@ export class DashboardComponent {
     };
 
     this.getTop10Products();
-    this.getPurrchasesByCategory();
+    this.getPurchasesByCategory();
     this.getLatestsPurchases();
 
     this._purchaseService.listenNewPurchase().subscribe({
       next: (purchase) => {
         this.getTop10Products();
-        this.getPurrchasesByCategory();
+        this.getPurchasesByCategory();
         this.getLatestsPurchases();
-        console.log(purchase);
         this._messageService.add({
           severity: ToastSeverity.SUCCESS,
           summary: 'Nova compra registrada!',
           detail: `Um produto foi vendido!`,
-          key: 'dashboard-tst'
+          key: 'dashboard-tst',
         });
-        
-        
       },
-      error: (error) => console.error(error),
-    })
+      error: (response: IErrorResponse) => {
+          console.error(response);
+          const errorMessage =
+            typeof response.error.message === 'string'
+              ? response.error.message
+              : response.error.message.at(-1);
 
+          this._messageService.add({
+            key: 'product-tst',
+            severity: 'error',
+            summary: 'Erro',
+            detail: errorMessage,
+          });
+        },
+    });
   }
 
   getTop10Products() {
-    return this._purchaseService.listTop10Products().subscribe({
-      next: (response) => {
-        const productsName = response.content.map((product) => product.name);
-        const productsSalesQuantity = response.content.map(
-          (product) => product.sales_quantity
-        );
-        this.columnData = {
-          ...this.columnData,
-          labels: [...productsName],
-          datasets: [
-            {
-              ...this.columnData!.datasets[0],
-              data: [...productsSalesQuantity],
-            },
-          ],
-        };
-      },
-      error: (error) => console.error(error),
-    });
+
+    //Verifica se há dados no gráfico de top produtos 
+    this.isLoading = !this.columnData?.labels.length
+
+    this._purchaseService
+      .listTop10Products()
+      .subscribe({
+        next: (response) => {
+          const productsName = response.content.map((product) => product.name);
+          const productsSalesQuantity = response.content.map(
+            (product) => product.sales_quantity
+          );
+          this.columnData = {
+            ...this.columnData,
+            labels: [...productsName],
+            datasets: [
+              {
+                ...this.columnData!.datasets[0],
+                data: [...productsSalesQuantity],
+              },
+            ],
+          };
+        },
+        error: (response: IErrorResponse) => {
+          console.error(response);
+          const errorMessage =
+            typeof response.error.message === 'string'
+              ? response.error.message
+              : response.error.message.at(-1);
+
+          this._messageService.add({
+            key: 'product-tst',
+            severity: 'error',
+            summary: 'Erro',
+            detail: errorMessage,
+          });
+        },
+      })
+      .add(() => (this.isLoading = false));
   }
 
-  getPurrchasesByCategory() {
-    return this._purchaseService.listPurchaseGroupByCategory().subscribe({
-      next: (response) => {
+  getPurchasesByCategory() {
 
-        this.totalSalesCategory = response.total;
-        const categories = response.content;
-        const categoriesName = categories.map((category) => `${category.name}(${category.sales_quantity})`);
-        const purchasesQuantity = categories.map(
-          (category) => category.sales_quantity
-        );
-        const bgColors = categories.map((c, index) => `rgb(${colors[index].rgb})`);
-        
+    //Verifica se há dados no gráfico de top produtos 
+    this.isLoading = !this.doughnutData?.labels.length
 
-        this.doughnutData = {
-          ...this.doughnutData,
-          labels: [...categoriesName],
-          datasets: [
-            {
-              ...this.doughnutData!.datasets[0],
-              data: [...purchasesQuantity],
-              backgroundColor: [...bgColors],
-              hoverBackgroundColor: [...bgColors],
-            },
-          ],
-        };
-      },
-      error: (error) => console.error(error),
-    });
+    this._purchaseService
+      .listPurchaseGroupByCategory()
+      .subscribe({
+        next: (response) => {
+          this.totalSalesCategory = response.total;
+          const categories = response.content;
+          const categoriesName = categories.map(
+            (category) => `${category.name}(${category.sales_quantity})`
+          );
+          const purchasesQuantity = categories.map(
+            (category) => category.sales_quantity
+          );
+          const bgColors = categories.map(
+            (c, index) => `rgb(${colors[index].rgb})`
+          );
+
+          this.doughnutData = {
+            ...this.doughnutData,
+            labels: [...categoriesName],
+            datasets: [
+              {
+                ...this.doughnutData!.datasets[0],
+                data: [...purchasesQuantity],
+                backgroundColor: [...bgColors],
+                hoverBackgroundColor: [...bgColors],
+              },
+            ],
+          };
+        },
+        error: (response: IErrorResponse) => {
+          console.error(response);
+          const errorMessage =
+            typeof response.error.message === 'string'
+              ? response.error.message
+              : response.error.message.at(-1);
+
+          this._messageService.add({
+            key: 'product-tst',
+            severity: 'error',
+            summary: 'Erro',
+            detail: errorMessage,
+          });
+        },
+      })
+      .add(() => (this.isLoading = false));
   }
 
   getLatestsPurchases() {
-    return this._purchaseService.listPurchase({
-      skip: 0,
-      take: 4,
-      order: 'desc'
-    }).subscribe({
-      next: (response) => {
-        this.latestsPurchases = [...response.content];
-      },
-      error: (error) => console.error(error),
-    });
+
+    //Verifica se há dados no gráfico de top produtos 
+    this.isLoading = !this.latestsPurchases.length
+
+    this._purchaseService
+      .listPurchase({
+        skip: 0,
+        take: 4,
+        order: 'desc',
+      })
+      .subscribe({
+        next: (response) => {
+          this.latestsPurchases = [...response.content];
+        },
+        error: (response: IErrorResponse) => {
+          console.error(response);
+          const errorMessage =
+            typeof response.error.message === 'string'
+              ? response.error.message
+              : response.error.message.at(-1);
+
+          this._messageService.add({
+            key: 'product-tst',
+            severity: 'error',
+            summary: 'Erro',
+            detail: errorMessage,
+          });
+        },
+      })
+      .add(() => (this.isLoading = false));
   }
 }

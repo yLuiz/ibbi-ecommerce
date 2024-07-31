@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard.component';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { ToastModule } from 'primeng/toast';
     ChartModule,
     TableModule,
     ToastModule,
+    ProgressSpinnerModule
   ]
 })
 export class DashboardModule { }

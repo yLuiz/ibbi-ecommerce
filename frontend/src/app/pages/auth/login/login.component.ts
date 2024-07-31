@@ -90,7 +90,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   forgotPassword() {
-    this._messageService.add({ severity: ToastSeverity.WARN, summary: 'Funcionalidade ainda não implementada.', key: 'login-tst'});
+    this._messageService.add({
+      severity: ToastSeverity.WARN,
+      summary: 'Funcionalidade ainda não implementada.',
+      key: 'login-tst',
+    });
   }
 
   getDollarQuotation() {
@@ -102,7 +106,20 @@ export class LoginComponent implements OnInit, OnDestroy {
             Number(response.USDBRL.high)
           );
         },
-        error: (error) => console.error(error),
+        error: (response: IErrorResponse) => {
+          console.error(response);
+          const errorMessage =
+            typeof response.error.message === 'string'
+              ? response.error.message
+              : response.error.message.at(-1);
+
+          this._messageService.add({
+            key: 'product-tst',
+            severity: 'error',
+            summary: 'Erro',
+            detail: errorMessage,
+          });
+        },
       })
       .add();
   }

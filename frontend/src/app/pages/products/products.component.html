@@ -1,3 +1,5 @@
+<p-toast key="product-tst"></p-toast>
+
 <ng-container *ngIf="isAddingNewProduct; else listProducts">
   <app-product-form
     (onSubmit)="createProduct($event)"
@@ -32,8 +34,10 @@
       </p-button>
     </div>
     <div class="p-toolbar-group-end gap-4 flex-wrap">
-      <p-button [severity]="isMyProductsActive ? 'success' : 'secondary'" (onClick)="toggleMyProducts()">
-
+      <p-button
+        [severity]="isMyProductsActive ? 'success' : 'secondary'"
+        (onClick)="toggleMyProducts()"
+      >
         <span *ngIf="!isMyProductsActive; else my_product_button">
           <i class="pi pi-objects-column mr-2"></i>
           Meus Produtos
@@ -41,8 +45,8 @@
 
         <ng-template #my_product_button>
           <span>
-            <i class="pi pi-cart-plus "></i>
-            Comprar Produtos 
+            <i class="pi pi-cart-plus"></i>
+            Comprar Produtos
           </span>
         </ng-template>
       </p-button>
@@ -53,10 +57,13 @@
     </div>
   </p-toolbar>
 
-  <div class="card">
-    <ul class="flex gap-4 flex-wrap">
-      <li type="none" *ngFor="let product of products">
-        <app-product-card [product]="product"></app-product-card>
+  <div *ngIf="products.length && !isLoading" class="card mt-4">
+    <ul class="products-list">
+      <li class="w-full" type="none" *ngFor="let product of products">
+        <app-product-card
+          (onDelete)="getProducts()"
+          [product]="product"
+        ></app-product-card>
       </li>
     </ul>
     <p-paginator
@@ -64,5 +71,19 @@
       [rows]="rows"
       (onPageChange)="changePage($event)"
     ></p-paginator>
+  </div>
+  <div
+    *ngIf="isLoading"
+    class="flex w-full align-items-center justify-content-center"
+    [style]="{ height: '400px' }"
+  >
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+  <div
+    class="flex w-full align-items-center justify-content-center"
+    [style]="{ height: '400px' }"
+    *ngIf="!products.length && !isLoading"
+  >
+    Não há produtos em estoque.
   </div>
 </ng-template>

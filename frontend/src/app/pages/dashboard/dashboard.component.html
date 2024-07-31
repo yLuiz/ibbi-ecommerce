@@ -1,6 +1,6 @@
 <p-toast key="dashboard-tst"></p-toast>
 <section class="dashboard-section">
-  <div class="card lastests-purchase-table">
+  <div *ngIf="!isLoading" class="card lastests-purchase-table">
     <p-table
       *ngIf="latestsPurchases.length"
       [value]="latestsPurchases"
@@ -28,7 +28,7 @@
       </ng-template>
     </p-table>
   </div>
-  <div class="charts">
+  <div *ngIf="!isLoading" class="charts">
     <div class="chart-card doughnut-chart card overflow-hidden">
       <div class="content">
         <p-chart type="doughnut" [data]="doughnutData" [options]="options" />
@@ -45,5 +45,12 @@
         />
       </div>
     </div>
+  </div>
+  <div
+    *ngIf="isLoading"
+    class="flex w-full align-items-center justify-content-center"
+    [style]="{ height: '400px' }"
+  >
+    <p-progressSpinner ariaLabel="loading" />
   </div>
 </section>

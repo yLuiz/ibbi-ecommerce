@@ -5,6 +5,8 @@ import { IPagination } from '../../shared/interfaces/api/IPagination';
 import { AuthService } from '../../services/auth.service';
 import { IResponseEntity } from '../../shared/interfaces/api/IResponseEntity';
 import { PaginatorState } from 'primeng/paginator';
+import { IErrorResponse } from '../../shared/interfaces/api/IErrorResponse';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-purchase',
@@ -34,7 +36,8 @@ export class PurchaseComponent {
 
   constructor(
     private _purchaseService: PurchaseService,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _messageService: MessageService
   ) {
     this.userId = this._authService.decodePayloadJWT()?.sub || 0;
   }
@@ -97,7 +100,20 @@ export class PurchaseComponent {
         next: (response) => {
           this.myPurchases = { ...response };
         },
-        error: (error) => console.error(error),
+        error: (response: IErrorResponse) => {
+          console.error(response);
+          const errorMessage =
+            typeof response.error.message === 'string'
+              ? response.error.message
+              : response.error.message.at(-1);
+
+          this._messageService.add({
+            key: 'product-tst',
+            severity: 'error',
+            summary: 'Erro',
+            detail: errorMessage,
+          });
+        },
       })
       .add(() => {
         this.isLoading = false;
@@ -115,7 +131,20 @@ export class PurchaseComponent {
         next: (response) => {
           this.mySales = { ...response };
         },
-        error: (error) => console.error(error),
+        error: (response: IErrorResponse) => {
+          console.error(response);
+          const errorMessage =
+            typeof response.error.message === 'string'
+              ? response.error.message
+              : response.error.message.at(-1);
+
+          this._messageService.add({
+            key: 'product-tst',
+            severity: 'error',
+            summary: 'Erro',
+            detail: errorMessage,
+          });
+        },
       })
       .add(() => {
         this.isLoading = false;

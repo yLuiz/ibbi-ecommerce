@@ -11,6 +11,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
+import { ToastModule } from 'primeng/toast';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [ProductsComponent],
@@ -25,7 +28,9 @@ import { PaginatorModule } from 'primeng/paginator';
     InputTextModule,
     MultiSelectModule,
     DialogModule,
-    PaginatorModule
+    ToastModule,
+    PaginatorModule,
+    ProgressSpinnerModule
   ],
 })
 export class ProductsModule {}

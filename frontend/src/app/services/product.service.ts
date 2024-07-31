@@ -47,9 +47,9 @@ export class ProductService {
     return this._http.get<IResponseEntity<IProduct>>(`${environment.apiUrl}/product/${id}`);
   }
 
-  listByUser(id: number, pagination: any, filters: any) {}
-
   update(id: number, productUpdated: any) {}
 
-  delete(id: number) {}
+  delete(id: number) {
+    return this._http.delete<IResponseEntity<IProduct>>(`${environment.apiUrl}/product/${id}`);
+  }
 }

@@ -1,25 +1,62 @@
-
-<p-card class="product-card" [header]="product.name" subheader="{{productInfo.price}} ≈ {{productInfo.price_dollar}}">
-    <ng-template pTemplate="header">
-        <div class="flex justify-content-center align-items-center pt-4" [style]="{ maxWidth: '500px', height: '250px !important'}" >
-            <img [style]="{ width: '100%', height: '100%'}" alt="Card" src="{{ product.path_image ? url + product.path_image : '../../../assets/images/product_default.svg' }}" />
-        </div>
-    </ng-template>
+<p-confirmDialog key="{{ product.id+product.name }}" />
+<p-card
+  class="product-card"
+  [header]="product.name"
+  subheader="{{ productInfo.price }} ≈ {{ productInfo.price_dollar }}"
+>
+  <ng-template pTemplate="header">
+    <div
+      class="flex justify-content-center align-items-center pt-4"
+      [style]="{ maxWidth: '500px', height: '250px !important' }"
+    >
+      <img
+        [style]="{ width: '100%', height: '100%' }"
+        alt="Card"
+        src="{{
+          product.path_image
+            ? url + product.path_image
+            : '../../../assets/images/product_default.svg'
+        }}"
+      />
+    </div>
+  </ng-template>
+  <div class="content">
     <p class="p-description">
-        {{
-            product.description
-        }}
+      {{ product.description }}
     </p>
-    <ng-template pTemplate="footer">
-        <div class="flex flex-wrap gap-3 mt-1">
-            <!-- <p-button label="Cancel" severity="secondary" class="w-full" styleClass="w-full" /> -->
-            <p-button (onClick)="goToPurchase()" *ngIf="product.seller.id !== userId; else ownProduct" label="Comprar" class="w-full newpurchase-link" styleClass="w-full" >
-            </p-button>
-            <ng-template #ownProduct>
-                <p-button [disabled]="true" label="Editar" class="w-full" styleClass="w-full">
-                </p-button>
-            </ng-template>
-            
+    <!-- <ng-template pTemplate="footer"> -->
+    <div class="flex flex-wrap gap-3 mt-1">
+      <!-- <p-button label="Cancel" severity="secondary" class="w-full" styleClass="w-full" /> -->
+      <p-button
+        (onClick)="goToPurchase()"
+        *ngIf="product.seller.id !== userId; else ownProduct"
+        label="Comprar"
+        class="w-full newpurchase-link"
+        styleClass="w-full"
+      >
+      </p-button>
+      <ng-template #ownProduct>
+        <div class="action-buttons">
+          <p-button
+            (onClick)="update()"
+            label="Editar"
+            class="w-full"
+            styleClass="w-full"
+          >
+            <i class="pi pi-pencil m-0"></i>
+          </p-button>
+          <p-button
+            (onClick)="opentDeleteDialog($event)"
+            severity="danger"
+            label="Deletar"
+            class="w-full"
+            styleClass="w-full"
+          >
+            <i class="pi pi-trash m-0"></i>
+          </p-button>
         </div>
-    </ng-template>
+      </ng-template>
+    </div>
+    <!-- </ng-template> -->
+  </div>
 </p-card>

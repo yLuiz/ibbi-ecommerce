@@ -1,19 +1,24 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductCardComponent } from './product-card/product-card.component';
-import { ProductFormComponent } from './product-form/product-form.component';
-import { ButtonModule } from 'primeng/button';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
-
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
+import { ToastModule } from 'primeng/toast';
+import { ProductCardComponent } from './product-card/product-card.component';
+import { ProductFormComponent } from './product-form/product-form.component';
 
 @NgModule({
-  declarations: [ProductCardComponent, ProductFormComponent],
+  declarations: [
+    ProductCardComponent,
+    ProductFormComponent,
+  ],
   imports: [
     CommonModule,
     ButtonModule,
@@ -24,8 +29,11 @@ import { FileUploadModule } from 'primeng/fileupload';
     RouterModule,
     CardModule,
     DropdownModule,
-    FileUploadModule
+    ToastModule,
+    FileUploadModule,
+    ConfirmDialogModule,
   ],
-  exports: [ProductCardComponent, ProductFormComponent]
+  exports: [ProductCardComponent, ProductFormComponent],
+  providers: [ConfirmationService]
 })
-export class ProductModule { }
+export class ProductModule {}

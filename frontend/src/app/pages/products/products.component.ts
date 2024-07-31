@@ -9,6 +9,8 @@ import { DollarQuotationService } from '../../services/dollar-quotation.service'
 import { IPagination } from '../../shared/interfaces/api/IPagination';
 import { PaginatorState } from 'primeng/paginator';
 import { AuthService } from '../../services/auth.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { IErrorResponse } from '../../shared/interfaces/api/IErrorResponse';
 
 export interface IProductFormSubmit {
   productJSON: ICreateProduct;
@@ -31,7 +33,8 @@ export class ProductsComponent {
     private _productService: ProductService,
     private _categoryService: CategoryService,
     private _dollarQuotationService: DollarQuotationService,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _messageService: MessageService
   ) {
     this.rows = 5;
     this.pagination = {
@@ -48,6 +51,7 @@ export class ProductsComponent {
   isAddingNewProduct = false;
   isMyProductsActive = false;
   nameOrDescription?: string;
+  isLoading = true;
 
   items: any[] = [
     {
@@ -115,10 +119,7 @@ export class ProductsComponent {
       return;
     }
 
-    // Aqui utilizei o type generico "any".
-    // Pois o typescript não permitiu fazer calculo com tipo data, mesmo que o JS permita.
     const now = new Date();
-    // const diffTime = Math.abs((<any>quotation?.lastUpdate) - now);
     const diffTime = Math.abs(
       quotation!.lastUpdate.getMilliseconds() - now.getMilliseconds()
     );
@@ -136,12 +137,27 @@ export class ProductsComponent {
             Number(response.USDBRL.high)
           );
         },
-        error: (error) => console.error(error),
+        error: (response: IErrorResponse) => {
+          console.error(response);
+          const errorMessage =
+            typeof response.error.message === 'string'
+              ? response.error.message
+              : response.error.message.at(-1);
+
+          this._messageService.add({
+            key: 'product-tst',
+            severity: 'error',
+            summary: 'Erro',
+            detail: errorMessage,
+          });
+        },
       })
       .add();
   }
 
   getProducts(filters?: IProductFilter) {
+    this.isLoading = true;
+
     if (this.isMyProductsActive) {
       filters = {
         ...filters,
@@ -149,7 +165,6 @@ export class ProductsComponent {
         seller: this._authService.decodePayloadJWT()?.sub,
       };
       delete filters.noseller;
-
     } else {
       filters = {
         ...filters,
@@ -167,16 +182,45 @@ export class ProductsComponent {
           this.products = [...response.content];
           this.totalItems = response.total || 0;
         },
-        error: (error) => console.error(error),
-      })
-      .add();
+        error: (response: IErrorResponse) => {
+          console.error(response);
+          const errorMessage =
+            typeof response.error.message === 'string'
+              ? response.error.message
+              : response.error.message.at(-1);
 
-    this._categoryService.listAll().subscribe({
-      next: (response) => {
-        this.categories = [...response.content];
-      },
-      error: (error) => console.error(error),
-    });
+          this._messageService.add({
+            key: 'product-tst',
+            severity: 'error',
+            summary: 'Erro',
+            detail: errorMessage,
+          });
+        },
+      })
+      .add(() => (this.isLoading = false));
+
+    this._categoryService
+      .listAll()
+      .subscribe({
+        next: (response) => {
+          this.categories = [...response.content];
+        },
+        error: (response: IErrorResponse) => {
+          console.error(response);
+          const errorMessage =
+            typeof response.error.message === 'string'
+              ? response.error.message
+              : response.error.message.at(-1);
+
+          this._messageService.add({
+            key: 'product-tst',
+            severity: 'error',
+            summary: 'Erro',
+            detail: errorMessage,
+          });
+        },
+      })
+      .add(() => (this.isLoading = false));
   }
 
   createProduct(newProduct: IProductFormSubmit) {
@@ -193,10 +237,36 @@ export class ProductsComponent {
             this.getProducts();
             this.toggleAddProduct();
           },
-          error: (error) => console.error(error),
+          error: (response: IErrorResponse) => {
+            console.error(response);
+            const errorMessage =
+              typeof response.error.message === 'string'
+                ? response.error.message
+                : response.error.message.at(-1);
+
+            this._messageService.add({
+              key: 'product-tst',
+              severity: 'error',
+              summary: 'Erro',
+              detail: errorMessage,
+            });
+          },
         });
       },
-      error: (error) => console.error(error),
+      error: (response: IErrorResponse) => {
+        console.error(response);
+        const errorMessage =
+          typeof response.error.message === 'string'
+            ? response.error.message
+            : response.error.message.at(-1);
+
+        this._messageService.add({
+          key: 'product-tst',
+          severity: 'error',
+          summary: 'Erro',
+          detail: errorMessage,
+        });
+      },
     });
   }
 }

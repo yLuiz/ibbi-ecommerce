@@ -79,7 +79,7 @@ $ npx prisma generate
 ```
 - Feito os passos para executar o banco, agora é necessário popular alguns dados de Categoria, então rode o seguinte comando:
  ``` bash
-$ npm run seed
+$ npx prisma db seed
 ```
 
 ## 🚀 Executando (Sem o Docker)

@@ -87,11 +87,6 @@ export class PurchaseComponent {
   }
 
   getMyPurchases() {
-    // this.myPurchases = {
-    //   content: [],
-    //   message: [],
-    //   total: 0,
-    // };
     this.isLoading = true;
 
     this._purchaseService
@@ -110,11 +105,6 @@ export class PurchaseComponent {
   }
 
   getMySales() {
-    // this.mySales = {
-    //   content: [],
-    //   message: [],
-    //   total: 0,
-    // };
     this.isLoading = true;
 
     this._purchaseService

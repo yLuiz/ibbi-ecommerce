@@ -39,7 +39,7 @@ export class ProductCardComponent {
     this.productInfo = {
       ...this.product,
       price: `R$${this.product.price.toFixed(2).replace('.', ',')}`,
-      price_dollar: `$${(this.product.price * dollar).toFixed(2)}`,
+      price_dollar: `$${(this.product.price / dollar).toFixed(2)}`,
     };
   }
 }

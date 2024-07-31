@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { TableModule } from 'primeng/table';
   imports: [
     CommonModule,
     ChartModule,
-    TableModule
+    TableModule,
+    ToastModule,
   ]
 })
 export class DashboardModule { }

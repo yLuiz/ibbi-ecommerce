@@ -53,7 +53,7 @@
 
     <p>
       Total: {{ totalPrice | currency : "BRL" }} ≈
-      {{ totalPrice * 5 | currency : "USD" }}
+      {{ totalPrice / 5 | currency : "USD" }}
     </p>
 
     <label for="email" class="block text-900 text-xl font-medium mb-2"

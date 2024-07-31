@@ -6,6 +6,8 @@ import { IData } from '../../shared/interfaces/chartsjs/IData';
 import { ITopProduct } from '../../shared/interfaces/models/IProduct';
 import { IPurchase } from '../../shared/interfaces/models/IPurchase';
 import { IColumnData } from '../../shared/interfaces/chartsjs/IColumnData';
+import { MessageService } from 'primeng/api';
+import { ToastSeverity } from '../../shared/types/ToastSeverity';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +27,10 @@ export class DashboardComponent {
   doughnutData?: IData;
   options?: IBasicOptions;
 
-  constructor(private _purchaseService: PurchaseService) {}
+  constructor(
+    private _purchaseService: PurchaseService,
+    private _messageService: MessageService,
+  ) {}
 
   ngOnInit() {
     // Pega o arquivo de estilo e obtém as propriedades de váriveis via JavaScript
@@ -132,7 +137,16 @@ export class DashboardComponent {
       next: (purchase) => {
         this.getTop10Products();
         this.getPurrchasesByCategory();
-        this.getLatestsPurchases();        
+        this.getLatestsPurchases();
+        console.log(purchase);
+        this._messageService.add({
+          severity: ToastSeverity.SUCCESS,
+          summary: 'Nova compra registrada!',
+          detail: `Um produto foi vendido!`,
+          key: 'dashboard-tst'
+        });
+        
+        
       },
       error: (error) => console.error(error),
     })

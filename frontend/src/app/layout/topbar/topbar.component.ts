@@ -3,6 +3,7 @@ import { LayoutService } from '../services/layout.service';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { ToastSeverity } from '../../shared/types/ToastSeverity';
 
 @Component({
   selector: 'app-topbar',
@@ -37,7 +38,9 @@ export class TopbarComponent {
 
     this.menuItems = [
       {
-        label: 'Editar perfil', icon: 'pi pi-fw pi-user-edit', command: () => {}
+        label: 'Editar perfil', icon: 'pi pi-fw pi-user-edit', command: () => {
+          this._messageService.add({ severity: ToastSeverity.WARN, summary: 'Funcionalidade ainda não implementada.', key: 'topbar-tst'});
+        }
       },
       {
         label: 'Sair', icon: 'pi pi-fw pi-sign-out', command: () => this.logout(),

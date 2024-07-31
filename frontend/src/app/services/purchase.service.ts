@@ -63,9 +63,9 @@ export class PurchaseService {
 
 
   listenNewPurchase() {
-    return new Observable((observer) => {
-      this.socket.on('new-purchase', (purchase: IPurchase) => {
-        observer.next(purchase);
+    return new Observable<IPurchaseCreated>((observer) => {
+      this.socket.on('new-purchase', (event: { message: string, purchase: IPurchaseCreated}) => {
+        observer.next(event.purchase);
       });
     });
     

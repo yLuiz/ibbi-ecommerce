@@ -54,6 +54,18 @@ export class ProductController {
         description: 'Number of items to skip',
     })
     @ApiQuery({
+        name: 'seller',
+        type: Number,
+        required: false,
+        description: 'Seller ID to get products.',
+    })
+    @ApiQuery({
+        name: 'noseller',
+        type: Number,
+        required: false,
+        description: 'Seller ID to exclude products.',
+    })
+    @ApiQuery({
         name: 'name',
         type: String,
         required: false,

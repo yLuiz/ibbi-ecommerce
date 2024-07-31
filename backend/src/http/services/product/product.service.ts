@@ -58,8 +58,8 @@ export class ProductService {
   }
 
   async findAll(query: IPaginationQuery): Promise<IPaginationData<Product[]>> {
-    
-    const offset: number | undefined = query.skip === 0 ? query.take : query.skip * query.take; 
+    const offset: number | undefined =
+      query.skip === 0 ? 0 : query.skip * query.take;
 
     const products = await this._prismaService.product.findMany({
       skip: offset || 0,
@@ -88,12 +88,20 @@ export class ProductService {
     query: IPaginationQuery,
     filters: IProductFilter,
   ): Promise<IPaginationData<Product[]>> {
-    const { name, description, categories, nostock } = filters;
+    const { name, description, categories, nostock, seller, noseller } =
+      filters;
 
     // Os ids do parametro chegam em string, aqui é necessário fazer a conversão para number.
     const serializedCategoriesId = categories
       ?.split(',')
       .map((category) => (isNaN(+category) ? 0 : +category));
+
+    if (seller && noseller) {
+      throw new HttpException(
+        MESSAGE.PRODUCT.NOSELLER_AND_SELLER_ARAMS,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     const whereFilters: Prisma.ProductWhereInput = {
       category: {
@@ -101,6 +109,13 @@ export class ProductService {
           in: categories ? [...serializedCategoriesId] : undefined,
         },
       },
+
+      seller: seller || noseller ? {
+        id: {
+          in: seller ? [+seller] : undefined,
+          notIn: noseller ? [+noseller] : undefined,
+        },
+      } : undefined,
 
       stock: {
         notIn: nostock === 'true' ? undefined : [0],
@@ -125,7 +140,8 @@ export class ProductService {
 
     // console.log(serializedCategoriesId);
 
-    const offset: number | undefined = query.skip === 0 ? query.take : query.skip * query.take; 
+    const offset: number | undefined =
+      query.skip === 0 ? 0 : query.skip * query.take;
 
     const products = await this._prismaService.product.findMany({
       skip: offset || 0,

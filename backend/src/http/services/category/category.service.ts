@@ -33,7 +33,7 @@ export class CategoryService {
 
         if (query.take && query.skip) {
             
-            const offset = query.skip === 0 ? query.take : query.skip * query.take; 
+            const offset = query.skip === 0 ? 0 : query.skip * query.take; 
 
             categories = await this._prismaService.category.findMany({
                 skip: offset || 0,

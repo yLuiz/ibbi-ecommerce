@@ -51,7 +51,7 @@ export class UserService {
 
         const { skip, take } = query;
 
-        const offset: number | undefined = query.skip === 0 ? query.take : query.skip * query.take;
+        const offset: number | undefined = query.skip === 0 ? 0 : query.skip * query.take;
 
         const users = await this._prismaService.user.findMany({
             take: +take,
@@ -93,7 +93,7 @@ export class UserService {
             }
         });
 
-        const offset: number | undefined = query.skip === 0 ? query.take : query.skip * query.take;
+        const offset: number | undefined = query.skip === 0 ? 0 : query.skip * query.take;
 
         const users = await this._prismaService.user.findMany({
             take: +take,

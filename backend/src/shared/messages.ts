@@ -42,7 +42,8 @@ export const MESSAGE = {
         NOT_EMPTY: 'Produto não pode ser vazio.',
         INVALID_ID: 'Produto inválido.',
         ID_NOT_EMPTY: 'ID do Produto não pode ser vazio.',
-        STOCK_NOT_ENOUGH: 'Não há estoque suficiente do produto.'
+        STOCK_NOT_ENOUGH: 'Não há estoque suficiente do produto.',
+        NOSELLER_AND_SELLER_ARAMS: 'Você não pode solicitar produtos por vendendor e sem vendedor ao mesmo tempo.'
     },
     USER: {
         NOT_FOUND: 'Usuário não encontrado.',

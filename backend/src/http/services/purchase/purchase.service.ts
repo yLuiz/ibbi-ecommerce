@@ -82,7 +82,7 @@ export class PurchaseService {
 
     async findAll(query: IPaginationQuery): Promise<IPaginationData<Purchase[]>> {
 
-        const offset: number | undefined = query.skip === 0 ? query.take : query.skip * query.take; 
+        const offset: number | undefined = query.skip === 0 ? 0 : query.skip * query.take; 
 
         const purchases = await this._prismaService.purchase.findMany({
             skip: offset || 0,
@@ -139,7 +139,7 @@ export class PurchaseService {
             }
         });
 
-        const offset: number | undefined = query.skip === 0 ? query.take : query.skip * query.take;
+        const offset: number | undefined = query.skip === 0 ? 0 : query.skip * query.take;
 
         const purchases = await this._prismaService.purchase.findMany({
             skip: offset || 0,

@@ -35,9 +35,10 @@ $ npm start
 ```
 
 ## 🚀 Executando (Com o Docker)
-Caso não queira ter problemas com ambiente, rode apenas o seguinte comando docker:
+Caso não queira ter problemas com ambiente, rode os seguintes comando docker:
 
 ``` bash
+$ docker-compose build
 $ docker-compose up -d
 ```
 
@@ -89,9 +90,10 @@ $ npm run start:dev
 ```
 
 ## 🚀 Executando (Com o Docker)
-Caso não queira ter problemas com ambiente, rode apenas o seguinte comando docker:
+Caso não queira ter problemas com ambiente, rode os seguintes comando docker:
 
 ``` bash
+$ docker-compose build
 $ docker-compose up -d
 ```
 

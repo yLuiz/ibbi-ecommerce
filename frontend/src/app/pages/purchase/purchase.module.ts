@@ -8,7 +8,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
-
+import { TableModule } from 'primeng/table';
+import { TabViewModule } from 'primeng/tabview';
+import { ComponentsModule } from '../../components/components.module';
 
 
 @NgModule({
@@ -18,13 +20,16 @@ import { TagModule } from 'primeng/tag';
   ],
   imports: [
     CommonModule,
+    ComponentsModule,
     ToastModule,
     ReactiveFormsModule,
     FormsModule,
     InputTextModule,
     InputNumberModule,
     ButtonModule,
-    TagModule
-  ],
+    TableModule,
+    TabViewModule,
+    TagModule,
+  ]
 })
 export class PurchaseModule { }

@@ -32,7 +32,6 @@ export class ProductsComponent {
 
   isAddingNewProduct = false;
   nameOrDescription?: string;
-  dollarQuotation = 1;
 
   toggleAddProduct() {
     this.isAddingNewProduct = !this.isAddingNewProduct;
@@ -81,7 +80,6 @@ export class ProductsComponent {
   }
 
   updateQuotation() {
-
     const quotation = this._dollarQuotationService.getSavedQuotation();
 
     if (!quotation) {
@@ -93,20 +91,26 @@ export class ProductsComponent {
     // Pois o typescript não permitiu fazer calculo com tipo data, mesmo que o JS permita.
     const now = new Date();
     // const diffTime = Math.abs((<any>quotation?.lastUpdate) - now);
-    const diffTime = Math.abs(quotation!.lastUpdate.getMilliseconds() - now.getMilliseconds());
-    const diffMin = Math.floor(diffTime / 60000)
-    
+    const diffTime = Math.abs(
+      quotation!.lastUpdate.getMilliseconds() - now.getMilliseconds()
+    );
+    const diffMin = Math.floor(diffTime / 60000);
+
+    if (diffMin > 10) this.getDollarQuotation();
   }
 
   getDollarQuotation() {
-    this._dollarQuotationService.getDollarQuotation().subscribe({
-      next: (response) => {
-        this.dollarQuotation = Number(response.USDBRL.high);
-        this._dollarQuotationService.setQuotation(Number(response.USDBRL.high));
-      },
-      error: (error) => console.error(error),
-    })
-    .add();
+    this._dollarQuotationService
+      .getDollarQuotation()
+      .subscribe({
+        next: (response) => {
+          this._dollarQuotationService.setQuotation(
+            Number(response.USDBRL.high)
+          );
+        },
+        error: (error) => console.error(error),
+      })
+      .add();
   }
 
   getProducts(filters?: IProductFilter) {

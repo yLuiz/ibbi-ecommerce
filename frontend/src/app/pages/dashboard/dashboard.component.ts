@@ -5,6 +5,7 @@ import { IBasicOptions } from '../../shared/interfaces/chartsjs/IBasicOptions';
 import { IData } from '../../shared/interfaces/chartsjs/IData';
 import { ITopProduct } from '../../shared/interfaces/models/IProduct';
 import { IPurchase } from '../../shared/interfaces/models/IPurchase';
+import { IColumnData } from '../../shared/interfaces/chartsjs/IColumnData';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,40 +18,30 @@ export class DashboardComponent {
   latestsPurchases: IPurchase[] = [];
   
   // COLUMN
-  basicData: any;
+  columnData?: IColumnData;
   basicOptions?: IBasicOptions;
 
   // DOUGHNUT
-  data?: IData;
-  options: any;
+  doughnutData?: IData;
+  options?: IBasicOptions;
 
   constructor(private _purchaseService: PurchaseService) {}
 
   ngOnInit() {
+    // Pega o arquivo de estilo e obtém as propriedades de váriveis via JavaScript
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
-
-    const textColorSecondary = documentStyle.getPropertyValue(
-      '--text-color-secondary'
-    );
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     // DOUGHNUT
-    this.data = {
-      labels: ['A', 'B', 'C'],
+    this.doughnutData = {
+      labels: [],
       datasets: [
         {
-          data: [540, 325, 702],
-          backgroundColor: [
-            documentStyle.getPropertyValue('--blue-500'),
-            documentStyle.getPropertyValue('--yellow-500'),
-            documentStyle.getPropertyValue('--green-500'),
-          ],
-          hoverBackgroundColor: [
-            documentStyle.getPropertyValue('--blue-400'),
-            documentStyle.getPropertyValue('--yellow-400'),
-            documentStyle.getPropertyValue('--green-400'),
-          ],
+          data: [],
+          backgroundColor: [],
+          hoverBackgroundColor: [],
         },
       ],
     };
@@ -67,23 +58,23 @@ export class DashboardComponent {
     };
 
     // COLUMN
-    this.basicData = {
+    this.columnData = {
       labels: [],
       datasets: [
         {
           label: 'Vendas',
           data: [],
           backgroundColor: [
-            'rgba(65,105,225, 0.2)',
-            'rgba(220,20,60, 0.2)',
-            'rgba(60,179,113, 0.2)',
-            'rgba(255,215,0, 0.2)',
-            'rgba(50,205,50, 0.2)',
-            'rgba(60,179,113)',
-            'rgba(46,139,87, 0.2)',
-            'rgba(0,255,255, 0.2)',
-            'rgba(238,130,238, 0.2)',
-            'rgba(128,0,128, 0.2)',
+            'rgb(65,105,225)',
+            'rgb(220,20,60)',
+            'rgb(60,179,113)',
+            'rgb(255,215,0)',
+            'rgb(50,205,50)',
+            'rgb(60,179,113)',
+            'rgb(46,139,87)',
+            'rgb(0,255,255)',
+            'rgb(238,130,238)',
+            'rgb(128,0,128)',
           ],
           borderColor: [
             'rgb(65,105,225)',
@@ -155,12 +146,12 @@ export class DashboardComponent {
         const productsSalesQuantity = response.content.map(
           (product) => product.sales_quantity
         );
-        this.basicData = {
-          ...this.basicData,
+        this.columnData = {
+          ...this.columnData,
           labels: [...productsName],
           datasets: [
             {
-              ...this.basicData.datasets[0],
+              ...this.columnData!.datasets[0],
               data: [...productsSalesQuantity],
             },
           ],
@@ -181,12 +172,12 @@ export class DashboardComponent {
         const bgColors = categories.map((c, index) => `rgb(${colors[index].rgb})`);
         
 
-        this.data = {
-          ...this.data,
+        this.doughnutData = {
+          ...this.doughnutData,
           labels: [...categoriesName],
           datasets: [
             {
-              ...this.data!.datasets[0],
+              ...this.doughnutData!.datasets[0],
               data: [...purchasesQuantity],
               backgroundColor: [...bgColors],
               hoverBackgroundColor: [...bgColors],

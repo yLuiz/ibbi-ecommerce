@@ -19,6 +19,7 @@ export class TopbarComponent {
   ) { }
 
   menuItems: MenuItem[] = [];
+  username = 'Usuário';
 
   @ViewChild('menubutton') menuButton!: ElementRef;
   @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
@@ -31,6 +32,9 @@ export class TopbarComponent {
   }
 
   ngOnInit() {
+
+    this.username = this._authService.decodePayloadJWT()?.name || '';
+
     this.menuItems = [
       {
         label: 'Editar perfil', icon: 'pi pi-fw pi-user-edit', command: () => {}

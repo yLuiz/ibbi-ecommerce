@@ -1,29 +1,30 @@
 export interface IBasicOptions {
-  plugins: {
-    legend: {
-      labels: {
-        color: string;
+  plugins?: {
+    legend?: {
+      labels?: {
+        usePointStyle?: boolean,
+        color?: string;
       };
     };
   };
-  scales: {
+  scales?: {
     y: {
-      beginAtZero: boolean;
-      ticks: {
+      beginAtZero?: boolean;
+      ticks?: {
         color: string;
       };
-      grid: {
-        color: string;
-        drawBorder: boolean;
+      grid?: {
+        color?: string;
+        drawBorder?: boolean;
       };
     };
-    x: {
-      ticks: {
-        color: string;
+    x?: {
+      ticks?: {
+        color?: string;
       };
-      grid: {
-        color: string;
-        drawBorder: boolean;
+      grid?: {
+        color?: string;
+        drawBorder?: boolean;
       };
     };
   };

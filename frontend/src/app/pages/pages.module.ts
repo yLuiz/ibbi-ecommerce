@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import { PurchaseModule } from './purchase/purchase.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { ComponentsModule } from '../components/components.module';
 
 
 
@@ -15,7 +16,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     AuthModule,
     ProductsModule,
     PurchaseModule,
-    DashboardModule
+    DashboardModule,
   ],
 })
 export class PagesModule { }

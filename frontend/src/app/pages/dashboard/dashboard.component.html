@@ -1,8 +1,8 @@
 <div class="chart-card card w-5 overflow-hidden">
-    <p-chart type="doughnut" [data]="data" [options]="options" />
+    <p-chart type="doughnut" [data]="doughnutData" [options]="options" />
 </div>
 <div class="card w-10">
-    <p-chart *ngIf="basicData.labels.length" type="bar" [data]="basicData" [options]="basicOptions" />
+    <p-chart *ngIf="columnData?.labels?.length" type="bar" [data]="columnData" [options]="basicOptions" />
 </div>
 <div class="card w-10">
     <p-table *ngIf="latestsPurchases.length" [value]="latestsPurchases" [tableStyle]="{ 'min-width': '50rem' }">
@@ -18,7 +18,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-purchase>
             <tr>
-                <td>{{ purchase.created_at | date }}</td>
+                <td>{{ purchase.created_at | date: 'dd/MM/yyyy'}}</td>
                 <td>{{ purchase.created_at | date:'hh:mm a' }}</td>
                 <td>{{ purchase.product.description }}</td>
                 <td>{{ purchase.client.name }}</td>

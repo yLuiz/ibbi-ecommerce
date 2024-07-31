@@ -4,7 +4,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { LayoutComponent } from './layout/layout.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
-import { ProductsComponent } from './pages/products/products.component';
 
 const routes: Routes = [
   {
@@ -15,11 +14,13 @@ const routes: Routes = [
   },
   {
     path: 'auth',
+    
     component: LoginComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'register',
+    
     component: RegisterComponent,
     canActivate: [AuthGuard]
   },

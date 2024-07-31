@@ -4,6 +4,7 @@ import { ProductsComponent } from '../pages/products/products.component';
 import { AuthGuard } from '../guards/auth.guard';
 import { NewPurchaseComponent } from '../pages/purchase/new-purchase/new-purchase.component';
 import { DashboardComponent } from '../pages/dashboard/dashboard.component';
+import { PurchaseComponent } from '../pages/purchase/purchase.component';
 
 
 const routes: Routes = [
@@ -15,11 +16,14 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [AuthGuard]
   },
   {
     path: 'products',
     component: ProductsComponent,
+  },
+  {
+    path: 'purchases',
+    component: PurchaseComponent
   },
   {
     path: 'newpurchase/:id',

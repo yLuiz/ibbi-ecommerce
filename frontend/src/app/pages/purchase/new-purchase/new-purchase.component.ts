@@ -126,6 +126,9 @@ export class NewPurchaseComponent {
         this.product = { ...response.content };
 
         this.totalPrice = this.product!.price;
+        
+        // Valor 1 foi fornecido por ser valor padrão sempre que o componente for iniciado.
+        this.status = this.getStatus(1);
       },
       error: (response: IErrorResponse) => {
         console.error('Error:', response);
@@ -144,20 +147,20 @@ export class NewPurchaseComponent {
       this.purchaseForm.updateValueAndValidity();
     });
 
-    this.dollar = this._dollarQuotationService.getSavedQuotation()?.quotation || 1;
-
+    this.dollar =
+      this._dollarQuotationService.getSavedQuotation()?.quotation || 1;
   }
 
   getStatus(value: number): IQuantityStatus {
-    if (value > this.product!.stock) {
-      return {
-        message: QuantityStatusMessage.OUT_OF_STOCK,
-        severity: 'danger',
-      };
-    } else if (this.product!.stock === value) {
+    if (this.product!.stock === value) {
       return {
         message: QuantityStatusMessage.EXACTLY_LOW,
         severity: 'warning',
+      };
+    } else if (value > this.product!.stock) {
+      return {
+        message: QuantityStatusMessage.OUT_OF_STOCK,
+        severity: 'danger',
       };
     } else if (this.product!.stock - value <= 5) {
       return {

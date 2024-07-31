@@ -12,6 +12,9 @@ import { ProductFormComponent } from './product/product-form/product-form.compon
 import { ProductCardComponent } from './product/product-card/product-card.component';
 import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
+import { PurchaseTableComponent } from './purchase/purchase-table/purchase-table.component';
+import { TableModule } from 'primeng/table';
+import { PurchaseModule } from './purchase/purchase.module';
 
 
 
@@ -22,8 +25,9 @@ import { UserModule } from './user/user.module';
     ButtonModule,
     ToastModule,
     ProductModule,
-    UserModule
+    PurchaseModule,
+    UserModule,
   ],
-  exports: [UserModule, ProductModule]
+  exports: [UserModule, ProductModule, PurchaseModule]
 })
 export class ComponentsModule { }

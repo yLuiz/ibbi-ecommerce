@@ -10,6 +10,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "seed": "ts-node prisma/seed.ts",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "start:migrate:prod": "npx prisma db pull && npm run start:prod",
@@ -33,6 +34,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "deep-parse-json": "^2.0.0",
+    "dotenv": "^16.4.5",
     "multer": "^1.4.5-lts.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"

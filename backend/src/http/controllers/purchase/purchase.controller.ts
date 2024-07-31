@@ -120,12 +120,14 @@ export class PurchaseController {
     @ApiOkResponse({ description: 'Get Purchase by category' })
     async findSalesByCategories(): Promise<IResponseEntity<ISalesByCategoryResult[]>> {
         try {
-
             const purchases = await this._purchaseService.salesByCategories();
+            const sales_quantity = purchases.map(p => p.sales_quantity);
+            const total = sales_quantity.reduce((a, b) => Number(a) + Number(b));
 
             return {
                 content: purchases,
                 message: [MESSAGE.SERVER.OK],
+                total
             } as IResponseEntity<ISalesByCategoryResult[]>;
         }
         catch (error) {

@@ -49,10 +49,10 @@ Depois é só acessar em sua máquina o seguinte endereço: `http://localhost:42
 # 📡 Back-end
 
 # 💻 Tecnologias
-* JavaScript
 * Node.js (v20.16.0)
 * Nest.js (v10)
 * PrismaORM (v5.17.0)
+* * Typescript (v5.4.2)
 * MySQL 8
 
 ## ⚙ Configuração
@@ -79,6 +79,10 @@ Após isso, clone o repositório e entre na pasta `./backend` e execute os segui
 - Será necessário executar as entidades via Prisma para que as colunas no banco de dados sejam gerados, para isso rode:
 ``` bash
     $ npx prisma db push
+```
+- Caso comando acima não seja executado com sucesso, tente executar o seguinte:
+``` bash
+    $ npx prisma migrate deploy
 ```
 
 - Após o comando executar com sucesso, execute o próximo comando:

@@ -6,7 +6,7 @@
         🛒
         Suas Compras 
     </h1>
-    <app-purchase-table (handlePageChange)="onPageChange($event)" [isLoadingData]="isLoading" *ngIf="myPurchases.total" [totalPurchases]="myPurchases.total" [purchases]="myPurchases.content"></app-purchase-table
+    <app-purchase-table (handlePageChange)="onPageChange($event)" [isLoadingData]="isLoading" [totalPurchases]="myPurchases.total" [purchases]="myPurchases.content"></app-purchase-table
   ></p-tabPanel>
   <p-tabPanel header="💲 Vendas"
     >

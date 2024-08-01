@@ -36,7 +36,7 @@ export class ProductsComponent {
     private _authService: AuthService,
     private _messageService: MessageService
   ) {
-    this.rows = 5;
+    this.rows = 10;
     this.pagination = {
       skip: 0,
       take: this.rows,

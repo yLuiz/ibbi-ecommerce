@@ -5,6 +5,7 @@ services:
   # Database service using MySQL image
   database:
     image: mysql:8
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: ecommerce
@@ -12,7 +13,8 @@ services:
       MYSQL_PASSWORD: luiz123
     ports:
       - "3306:3306"
-
+    volumes:
+      - mysql:/var/lib/mysql/data
   # Backend service
   backend:
     build: . 
@@ -23,3 +25,6 @@ services:
       - database
     env_file:
       - .env
+volumes:
+  mysql:
+    name: ecommerce-db

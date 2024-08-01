@@ -59,9 +59,14 @@ Depois é só acessar em sua máquina o seguinte endereço: `http://localhost:42
 Para conseguir rodar o Backe-end, você precisa ter instalado o Node.js na versão 20.16.0 em sua máquina.
 Após isso, clone o repositório e entre na pasta `./backend` e execute os seguintes passos:
 
-- Primeiramente, verifique o arquivo .env da sua aplicação, ele deve contar duas variaveis:
+- Primeiramente, você precisa ter o banco de dados MySQL, caso queira subir em um docker, execute o seguinte comando:
 ``` bash
-    DATABASE_URL="mysql://user:password@localhost:3306/your_databse?createDatabaseIfNotExist=true&schema=public"
+    $ docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=ecommerce -e MYSQL_USER=main -e MYSQL_PASSWORD=root mysql:8
+```
+
+- Em seguida, verifique o arquivo .env da sua aplicação, ele deve contar duas variaveis:
+``` bash
+    DATABASE_URL="mysql://root:root@localhost:3306/ecommerce?createDatabaseIfNotExist=true&schema=public"
     JWT_SECRET="your_secret_key
 ```
 
@@ -91,6 +96,7 @@ Após a configurção, execute o seguinte comando:
 $ npm run start:dev
 ```
 
+## Obs: problemas com docker-compose
 ## 🚀 Executando (Com o Docker)
 Caso não queira ter problemas com ambiente, rode os seguintes comando docker:
 

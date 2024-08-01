@@ -93,6 +93,10 @@ export class ProductsComponent {
 
   search() {
     const categoryIds = this.selectedCategories.map((category) => category.id);
+    this.pagination = {
+      skip: 0,
+      take: this.rows,
+    }
 
     let filters = categoryIds.length
       ? ({

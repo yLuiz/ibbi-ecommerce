@@ -3,7 +3,7 @@ import { MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage
 import { Server, Socket } from 'socket.io';
 import { MESSAGE } from 'src/shared/messages';
 
-const corsOrigins = ["**", "http://localhost:4200"];
+const corsOrigins = ["**", "http://localhost:4200", "https://ibbi-ecommerce.vercel.app"];
 
 const options = {
   cors: {

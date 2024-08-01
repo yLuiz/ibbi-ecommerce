@@ -121,8 +121,8 @@ export class PurchaseController {
     async findSalesByCategories(): Promise<IResponseEntity<ISalesByCategoryResult[]>> {
         try {
             const purchases = await this._purchaseService.salesByCategories();
-            const sales_quantity = purchases.map(p => p.sales_quantity);
-            const total = sales_quantity.reduce((a, b) => Number(a) + Number(b));
+            const sales_quantity = purchases.map(p => p.sales_quantity) || [];
+            const total = sales_quantity?.length > 0 ? sales_quantity.reduce((a, b) => Number(a) + Number(b)) : 0;
 
             return {
                 content: purchases,

@@ -13,9 +13,11 @@ import { PurchaseService } from './services/purchase/purchase.service';
 import { UserService } from './services/user/user.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { S3Service } from './services/s3/s3.service';
+import { multerConfig } from 'src/config/multer';
+
 
 @Module({
-  imports: [DbModule, MulterModule.register({ dest: './upload' }),],
+  imports: [DbModule, MulterModule.register(multerConfig),],
   providers: [CategoryService, ProductService, FileService, PurchaseService, UserService, SalesGateway, S3Service],
   controllers: [UserController, CategoryController, ProductController, PurchaseController, FileController],
   exports: [UserService]

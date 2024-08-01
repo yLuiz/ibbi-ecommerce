@@ -8,13 +8,13 @@ import { MESSAGE } from 'src/shared/messages';
 export class FileService {
 
     getFileByFilename(filename: string, response: Response) {
-        const filePath = join(process.cwd(), 'tmp', filename);
+        const filePath = join(process.cwd(), 'upload', filename);
         return response.sendFile(filePath);
     }
 
 
     deleteFileByFilename(filename: string, response: Response) {
-        const filePath = join(process.cwd(), 'tmp', filename);
+        const filePath = join(process.cwd(), 'upload', filename);
 
         try {
             unlinkSync(filePath);
@@ -29,7 +29,7 @@ export class FileService {
     }
     deleteFileByFilenameNoResopnse(filename: string) {
 
-        const filePath = join(process.cwd(), 'tmp', filename);
+        const filePath = join(process.cwd(), 'upload', filename);
         try {
             unlinkSync(filePath);
             return true;

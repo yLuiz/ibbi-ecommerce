@@ -2,6 +2,8 @@
 
 Sistema com fluxo de E-commerce, sugerido como teste técnico pelo IBBI
 
+Acesse: https://ibbi-ecommerce.vercel.app/
+
 # 🗃 Baixando o repositório
 Para baixar e executar o sistema, faça download com os seguintes comandos:
 

@@ -9,6 +9,7 @@ import { IColumnData } from '../../shared/interfaces/chartsjs/IColumnData';
 import { MessageService } from 'primeng/api';
 import { ToastSeverity } from '../../shared/types/ToastSeverity';
 import { IErrorResponse } from '../../shared/interfaces/api/IErrorResponse';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,6 +28,7 @@ export class DashboardComponent {
   doughnutData?: IData;
   options?: IBasicOptions;
   totalSalesCategory?: number;
+  private _socketSubscription?: Subscription;
 
   isLoading = true;
 
@@ -138,7 +140,7 @@ export class DashboardComponent {
     this.getPurchasesByCategory();
     this.getLatestsPurchases();
 
-    this._purchaseService.listenNewPurchase().subscribe({
+    this._socketSubscription = this._purchaseService.listenNewPurchase().subscribe({
       next: (purchase) => {
         this.getTop10Products();
         this.getPurchasesByCategory();
@@ -165,6 +167,12 @@ export class DashboardComponent {
           });
         },
     });
+  }
+
+  ngOnDestroy() {
+    if (this._socketSubscription) {
+      this._socketSubscription.unsubscribe();
+    }
   }
 
   getTop10Products() {

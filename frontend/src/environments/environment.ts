@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://localhost:3000/v1', // Replace with your actual API URL
-    socketUrl: 'http://localhost:3000', // Replace with your actual Socket URL
+    apiUrl: 'https://ibbi-ecommerce-production.up.railway.app/v1', // Replace with your actual API URL
+    socketUrl: 'https://ibbi-ecommerce-production.up.railway.app', // Replace with your actual Socket URL
 };

@@ -59,6 +59,7 @@ Depois é só acessar em sua máquina o seguinte endereço: `http://localhost:42
 Para conseguir rodar o Backe-end, você precisa ter instalado o Node.js na versão 20.16.0 em sua máquina.
 Após isso, clone o repositório e entre na pasta `./backend` e execute os seguintes passos:
 
+# Banco de dados 🎲
 - Primeiramente, você precisa ter o banco de dados MySQL, caso queira subir em um docker, execute o seguinte comando:
 ``` bash
     $ docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=ecommerce -e MYSQL_USER=main -e MYSQL_PASSWORD=root mysql:8

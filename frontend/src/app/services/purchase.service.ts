@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { IResponseEntity } from '../shared/interfaces/api/IResponseEntity';
 import { ICreatePurchase } from '../shared/interfaces/models/ICreatePurchase';
 import { IPurchase, IPurchaseCreated } from '../shared/interfaces/models/IPurchase';

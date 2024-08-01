@@ -8,7 +8,7 @@ import { ToastSeverity } from '../../../shared/types/ToastSeverity';
 import { IErrorResponse } from '../../../shared/interfaces/api/IErrorResponse';
 import { ProductService } from '../../../services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { DollarQuotationService } from '../../../services/dollar-quotation.service';
 
 enum QuantityStatusMessage {

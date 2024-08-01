@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { IResponseEntity } from '../shared/interfaces/api/IResponseEntity';
 import { ICreateUser } from '../shared/interfaces/models/ICreateUser';
 import { IUser } from '../shared/interfaces/models/IUser';

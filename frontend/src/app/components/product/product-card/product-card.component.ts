@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../services/auth.service';
 import { IProduct } from '../../../shared/interfaces/models/IProduct';
 import { DollarQuotationService } from '../../../services/dollar-quotation.service';

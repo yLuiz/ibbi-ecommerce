@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { IResponseEntity } from '../shared/interfaces/api/IResponseEntity';
 import { IProduct } from '../shared/interfaces/models/IProduct';
 import { IProductFilter } from '../shared/interfaces/api/IProductFilter';

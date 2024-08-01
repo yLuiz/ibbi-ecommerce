@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { IAuthResponse } from '../shared/interfaces/api/IAuthResponse';
 import { ITokenPayload } from '../shared/interfaces/api/ITokenPayload';

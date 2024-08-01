@@ -52,6 +52,7 @@ export class ProductsComponent {
   isMyProductsActive = false;
   nameOrDescription?: string;
   isLoading = true;
+  filters?: IProductFilter;
 
   items: any[] = [
     {
@@ -83,7 +84,7 @@ export class ProductsComponent {
 
   changePage(event: PaginatorState) {
     this.pagination.skip = event.page || 0;
-    this.getProducts();
+    this.getProducts(this.filters);
   }
 
   resetFilters() {
@@ -98,21 +99,21 @@ export class ProductsComponent {
       take: this.rows,
     }
 
-    let filters = categoryIds.length
+    this.filters = categoryIds.length
       ? ({
           categories: categoryIds.join(','),
         } as IProductFilter)
       : undefined;
 
     if (this.nameOrDescription) {
-      filters = {
-        ...filters,
+      this.filters = {
+        ...this.filters,
         name: this.nameOrDescription,
         description: this.nameOrDescription,
       };
     }
 
-    return this.getProducts(filters);
+    return this.getProducts(this.filters);
   }
 
   updateQuotation() {
@@ -169,7 +170,8 @@ export class ProductsComponent {
         seller: this._authService.decodePayloadJWT()?.sub,
       };
       delete filters.noseller;
-    } else {
+    } 
+    else {
       filters = {
         ...filters,
         seller: undefined,

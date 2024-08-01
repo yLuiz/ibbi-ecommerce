@@ -1,5 +1,5 @@
 <div class="card">
-  <div *ngIf="!isLoadingData; else loading" style="min-height: 350px;">
+  <div *ngIf="!isLoadingData && purchases.length; else loading " style="min-height: 350px;">
     <p-table
     [value]="purchases"
     [tableStyle]="{ 'min-width': '50rem'}"

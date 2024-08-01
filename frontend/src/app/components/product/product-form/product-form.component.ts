@@ -69,7 +69,7 @@ export class ProductFormComponent {
     const tokenPayload = this._authService.decodePayloadJWT();
 
     const newProduct: ICreateProduct = {
-      name: this.description?.value,
+      name: this.name?.value,
       description: this.description?.value,
       category_id: this.category?.value,
       price: +this.price?.value,

@@ -1,5 +1,5 @@
 <div class="card">
-  <div *ngIf="!isLoadingData && purchases.length; else loading " style="min-height: 350px;">
+  <div *ngIf="!isLoadingData && purchases.length;" style="min-height: 350px;">
     <p-table
     [value]="purchases"
     [tableStyle]="{ 'min-width': '50rem'}"
@@ -26,11 +26,11 @@
     </ng-template>
   </p-table>
   </div>
-  <ng-template #loading>
+  <ng-container *ngIf="isLoadingData">
     <div class="flex w-full align-items-center  justify-content-center" [style]="{ height: '400px' }">
         <p-progressSpinner ariaLabel="loading" />
     </div>
-  </ng-template>
+  </ng-container>
 
     <div *ngIf="!isLoadingData && !purchases.length" class="flex w-full align-items-center  justify-content-center" [style]="{ height: '400px' }">
         Não registros.

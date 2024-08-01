@@ -93,6 +93,7 @@ export class ProductsComponent {
   }
 
   search() {
+
     const categoryIds = this.selectedCategories.map((category) => category.id);
     this.pagination = {
       skip: 0,
@@ -162,6 +163,7 @@ export class ProductsComponent {
 
   getProducts(filters?: IProductFilter) {
     this.isLoading = true;
+    this.products = [];
 
     if (this.isMyProductsActive) {
       filters = {

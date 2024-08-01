@@ -73,18 +73,17 @@
     >
       <p-progressSpinner ariaLabel="loading" />
     </div>
+    <div
+      class="flex w-full align-items-center justify-content-center"
+      [style]="{ height: '400px' }"
+      *ngIf="!products.length && !isLoading"
+    >
+      Não há produtos em estoque.
+    </div>
     <p-paginator
       [totalRecords]="totalItems"
       [rows]="rows"
       (onPageChange)="changePage($event)"
     ></p-paginator>
-  </div>
-
-  <div
-    class="flex w-full align-items-center justify-content-center"
-    [style]="{ height: '400px' }"
-    *ngIf="!products.length && !isLoading"
-  >
-    Não há produtos em estoque.
   </div>
 </ng-template>

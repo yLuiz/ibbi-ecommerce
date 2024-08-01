@@ -1,6 +1,11 @@
 <p-toast key="dashboard-tst"></p-toast>
 <section class="dashboard-section">
-  <div *ngIf="!isLoading && columnData?.labels?.length || doughnutData?.labels?.length" class="card lastests-purchase-table">
+  <div
+    *ngIf="
+      (!isLoading && columnData?.labels?.length) || doughnutData?.labels?.length
+    "
+    class="card lastests-purchase-table"
+  >
     <p-table
       *ngIf="latestsPurchases.length"
       [value]="latestsPurchases"
@@ -27,11 +32,26 @@
         </tr>
       </ng-template>
     </p-table>
+    <div
+      *ngIf="
+        !isLoading &&
+        !latestsPurchases.length
+      "
+      class="flex w-full align-items-center justify-content-center"
+      [style]="{ height: '300px' }"
+    >
+      Não há registros.
+    </div>
   </div>
   <div *ngIf="!isLoading" class="charts">
     <div class="chart-card doughnut-chart card overflow-hidden">
       <div class="content">
-        <p-chart *ngIf="doughnutData?.labels?.length" type="doughnut" [data]="doughnutData" [options]="options" />
+        <p-chart
+          *ngIf="doughnutData?.labels?.length"
+          type="doughnut"
+          [data]="doughnutData"
+          [options]="options"
+        />
         <h2>Total de Vendas: {{ totalSalesCategory }}</h2>
       </div>
     </div>
@@ -53,9 +73,11 @@
   >
     <p-progressSpinner ariaLabel="loading" />
   </div>
-  
+
   <div
-    *ngIf="!isLoading && !columnData?.labels?.length && !doughnutData?.labels?.length"
+    *ngIf="
+      !isLoading && !columnData?.labels?.length && !doughnutData?.labels?.length
+    "
     class="flex w-full align-items-center justify-content-center"
     [style]="{ height: '400px' }"
   >

@@ -8,7 +8,6 @@ docker build -t mysql:8 -f Dockerfile.database .
 
 # Execute DB to application
 - Database
-
 docker build -t mysql:8 -f Dockerfile.database .
 docker run --name mysql -d -p 3306:3306 mysql:8
 

@@ -2,7 +2,7 @@
   <p-table
     *ngIf="!isLoadingData; else loading"
     [value]="purchases"
-    [tableStyle]="{ 'min-width': '50rem' }"
+    [tableStyle]="{ 'min-width': '50rem', 'min-height': '400px'}"
   >
     <ng-template pTemplate="header">
       <tr>

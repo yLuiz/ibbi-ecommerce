@@ -29,6 +29,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { multerConfig } from 'src/config/multer';
 import { FileService } from 'src/http/services/file/file.service';
 import { ProductService } from 'src/http/services/product/product.service';
+import { S3Service } from 'src/http/services/s3/s3.service';
 import { CreateProductDTO } from 'src/shared/dtos/input/CreateProductDTO';
 import { UpdateProductDTO } from 'src/shared/dtos/input/UpdateProductDTO';
 import { UploadProductImageDTO } from 'src/shared/dtos/input/UploadProductImageDTO';
@@ -46,6 +47,7 @@ export class ProductController {
   constructor(
     private _productService: ProductService,
     private _fileService: FileService,
+    private _s3Service: S3Service
   ) {}
 
   @Post()
@@ -214,11 +216,13 @@ export class ProductController {
   ) {
     try {
       const { filename } = image;
+
+      const filenameResponse = await this._s3Service.uploadFile(filename, image.buffer);
+
       const productUpdated = await this._productService.updatePathImage(
         +id,
-        filename,
+        filenameResponse,
       );
-      // fs.unlinkSync(path.join(__dirname, 'tmp', '..', '..', '..', '..', '..', 'tmp', filename));
 
       return {
         id,

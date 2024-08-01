@@ -2,6 +2,7 @@
 
 <ng-container *ngIf="isAddingNewProduct; else listProducts">
   <app-product-form
+    [isLoading]="isLoading"
     (onSubmit)="createProduct($event)"
     (onBack)="toggleAddProduct()"
   ></app-product-form>

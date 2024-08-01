@@ -226,47 +226,54 @@ export class ProductsComponent {
   createProduct(newProduct: IProductFormSubmit) {
     const { productJSON, image } = newProduct;
 
-    this._productService.create(productJSON).subscribe({
-      next: (response) => {
-        const productFormData = new FormData();
-        productFormData.append('image', image);
-        productFormData.append('id', String(response.content.id));
+    this.isLoading = true;
 
-        this._productService.uploadImage(productFormData).subscribe({
-          next: () => {
-            this.getProducts();
-            this.toggleAddProduct();
-          },
-          error: (response: IErrorResponse) => {
-            console.error(response);
-            const errorMessage =
-              typeof response.error.message === 'string'
-                ? response.error.message
-                : response.error.message.at(-1);
+    this._productService
+      .create(productJSON)
+      .subscribe({
+        next: (response) => {
+          const productFormData = new FormData();
+          productFormData.append('image', image);
+          productFormData.append('id', String(response.content.id));
 
-            this._messageService.add({
-              key: 'product-tst',
-              severity: 'error',
-              summary: 'Erro',
-              detail: errorMessage,
-            });
-          },
-        });
-      },
-      error: (response: IErrorResponse) => {
-        console.error(response);
-        const errorMessage =
-          typeof response.error.message === 'string'
-            ? response.error.message
-            : response.error.message.at(-1);
+          this._productService.uploadImage(productFormData).subscribe({
+            next: () => {
+              this.getProducts();
+              this.toggleAddProduct();
+            },
+            error: (response: IErrorResponse) => {
+              console.error(response);
+              const errorMessage =
+                typeof response.error.message === 'string'
+                  ? response.error.message
+                  : response.error.message.at(-1);
 
-        this._messageService.add({
-          key: 'product-tst',
-          severity: 'error',
-          summary: 'Erro',
-          detail: errorMessage,
-        });
-      },
-    });
+              this._messageService.add({
+                key: 'product-tst',
+                severity: 'error',
+                summary: 'Erro',
+                detail: errorMessage,
+              });
+            },
+          });
+        },
+        error: (response: IErrorResponse) => {
+          console.error(response);
+          const errorMessage =
+            typeof response.error.message === 'string'
+              ? response.error.message
+              : response.error.message.at(-1);
+
+          this._messageService.add({
+            key: 'product-tst',
+            severity: 'error',
+            summary: 'Erro',
+            detail: errorMessage,
+          });
+        },
+      })
+      .add(() => {
+        this.isLoading = false;
+      });
   }
 }

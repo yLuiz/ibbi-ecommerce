@@ -59,10 +59,13 @@ export class ProductFormComponent {
   }
 
   onUpload(event: Event) {
-    const files = (<HTMLInputElement>event.target).files;
-    this.productImage = files ? files[0] : undefined;
 
-    this.pathImage = URL.createObjectURL(this.productImage as File);
+    const files = (<HTMLInputElement>event.target).files;
+    this.productImage = files?.length ? files[0] : undefined;
+
+    this.pathImage = this.productImage ? URL.createObjectURL(this.productImage as File) : undefined;
+
+
   }
 
   handleSubmit(): void {

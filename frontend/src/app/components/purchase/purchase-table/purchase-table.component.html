@@ -1,6 +1,6 @@
 <div class="card">
   <p-table
-    *ngIf="purchases.length && !isLoadingData; else loading"
+    *ngIf="!isLoadingData; else loading"
     [value]="purchases"
     [tableStyle]="{ 'min-width': '50rem' }"
   >
@@ -30,6 +30,11 @@
         <p-progressSpinner ariaLabel="loading" />
     </div>
   </ng-template>
+
+    <div *ngIf="!isLoadingData && !purchases.length" class="flex w-full align-items-center  justify-content-center" [style]="{ height: '400px' }">
+        Não registros.
+    </div>
+
   <p-paginator
     (onPageChange)="onPageChange($event)"
     [rows]="rows"

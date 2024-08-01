@@ -57,8 +57,8 @@
     </div>
   </p-toolbar>
 
-  <div *ngIf="products.length && !isLoading" class="card mt-4">
-    <ul class="products-list">
+  <div class="card mt-4">
+    <ul *ngIf="products.length && !isLoading" class="products-list">
       <li class="w-full" type="none" *ngFor="let product of products">
         <app-product-card
           (onDelete)="getProducts()"

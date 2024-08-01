@@ -1,0 +1,22 @@
+<p-toast key="topbar-tst"></p-toast>
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <!-- <img src="assets/layout/images/{{layoutService.config().colorScheme === 'light' ? 'logo-dark' : 'logo-white'}}.svg" alt="logo"> -->
+        <span>IBBI E-commerce</span>
+    </a>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()">
+        <i class="pi pi-bars"></i>
+    </button>
+
+
+    <div #topbarmenu class="layout-topbar-menu flex align-items-center">
+        <p class="m-0 p-0 username">{{ username }}</p>
+        <p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
+        <button class="p-link layout-topbar-button flex flex-column" (click)="menu.toggle($event)">
+            <i class="pi pi-user"></i>
+            <span>Perfil</span>
+        </button>
+    
+    </div>
+</div>

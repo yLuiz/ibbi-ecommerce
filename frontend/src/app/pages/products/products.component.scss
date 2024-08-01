@@ -1,0 +1,19 @@
+.catogory-select {
+  min-width: 220px;
+  & > div {
+    width: 100%;
+  }
+}
+
+.products-list {
+  display: grid;
+  grid-gap: 30px;
+  grid-template-columns: repeat(auto-fill, 310px);
+
+  @media (max-width: 730px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}

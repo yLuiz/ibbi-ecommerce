@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int        @id @default(autoincrement())
+  name            String
+  email           String     @unique
+  password        String
+  created_at      DateTime   @default(now())
+  updated_at      DateTime   @updatedAt
+  Product         Product[]
+  clientPurchases Purchase[] @relation("ClientPurchases")
+  sellerPurchases Purchase[] @relation("SellerPurchases")
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  Product     Product[]
+}
+
+model Product {
+  id             Int        @id @default(autoincrement())
+  name           String
+  description    String
+  price          Float
+  path_image     String?
+  stock          Int
+  category_id    Int
+  seller_id      Int
+  delete         Int        @default(0)
+  sales_quantity Int        @default(0)
+  category       Category   @relation(fields: [category_id], references: [id])
+  seller         User       @relation(fields: [seller_id], references: [id])
+  Purchase       Purchase[]
+
+  @@index([category_id], map: "Product_category_id_fkey")
+  @@index([seller_id], map: "Product_seller_id_fkey")
+}
+
+model Purchase {
+  id          Int      @id @default(autoincrement())
+  product_id  Int
+  created_at  DateTime @default(now())
+  quantity    Int
+  total_price Float
+  client_id   Int
+  observation String?
+  seller_id   Int
+  client      User     @relation("ClientPurchases", fields: [client_id], references: [id])
+  product     Product  @relation(fields: [product_id], references: [id])
+  seller      User     @relation("SellerPurchases", fields: [seller_id], references: [id])
+
+  @@index([client_id], map: "Purchase_client_id_fkey")
+  @@index([product_id], map: "Purchase_product_id_fkey")
+  @@index([seller_id], map: "Purchase_seller_id_fkey")
+}

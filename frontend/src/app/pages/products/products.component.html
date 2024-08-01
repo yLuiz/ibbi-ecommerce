@@ -1,0 +1,89 @@
+<p-toast key="product-tst"></p-toast>
+
+<ng-container *ngIf="isAddingNewProduct; else listProducts">
+  <app-product-form
+    (onSubmit)="createProduct($event)"
+    (onBack)="toggleAddProduct()"
+  ></app-product-form>
+</ng-container>
+
+<ng-template #listProducts>
+  <p-toolbar>
+    <div class="p-toolbar-group-center">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          (keydown.enter)="search()"
+          [(ngModel)]="nameOrDescription"
+          pInputText
+          placeholder="Pesquisar"
+        />
+      </span>
+    </div>
+    <div class="flex gap-4 flex-wrap">
+      <p-multiSelect
+        [options]="categories"
+        [(ngModel)]="selectedCategories"
+        optionLabel="name"
+        placeholder="Filtrar por categoria"
+        class="catogory-select"
+      />
+      <p-button class="search-button" (onClick)="search()">
+        <i class="pi pi-search mr-2"></i>
+        Pesquisar
+      </p-button>
+    </div>
+    <div class="p-toolbar-group-end gap-4 flex-wrap">
+      <p-button
+        [severity]="isMyProductsActive ? 'success' : 'secondary'"
+        (onClick)="toggleMyProducts()"
+      >
+        <span *ngIf="!isMyProductsActive; else my_product_button">
+          <i class="pi pi-objects-column mr-2"></i>
+          Meus Produtos
+        </span>
+
+        <ng-template #my_product_button>
+          <span>
+            <i class="pi pi-cart-plus"></i>
+            Comprar Produtos
+          </span>
+        </ng-template>
+      </p-button>
+      <p-button (onClick)="toggleAddProduct()">
+        <i class="pi pi-plus mr-2"></i>
+        Adicionar Produto
+      </p-button>
+    </div>
+  </p-toolbar>
+
+  <div *ngIf="products.length && !isLoading" class="card mt-4">
+    <ul class="products-list">
+      <li class="w-full" type="none" *ngFor="let product of products">
+        <app-product-card
+          (onDelete)="getProducts()"
+          [product]="product"
+        ></app-product-card>
+      </li>
+    </ul>
+    <p-paginator
+      [totalRecords]="totalItems"
+      [rows]="rows"
+      (onPageChange)="changePage($event)"
+    ></p-paginator>
+  </div>
+  <div
+    *ngIf="isLoading"
+    class="flex w-full align-items-center justify-content-center"
+    [style]="{ height: '400px' }"
+  >
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+  <div
+    class="flex w-full align-items-center justify-content-center"
+    [style]="{ height: '400px' }"
+    *ngIf="!products.length && !isLoading"
+  >
+    Não há produtos em estoque.
+  </div>
+</ng-template>

@@ -1,0 +1,100 @@
+<p-toast key="purchase-toast"></p-toast>
+
+<section
+  style="border-radius: 24px"
+  class="w-full h-full flex align-items-center justify-content-center surface-card p-6"
+>
+  <form [formGroup]="purchaseForm" class="h-full" #formDir="ngForm">
+    <h1>{{ product?.name }}</h1>
+
+    <div class="product-header">
+      <ng-container *ngIf="product">
+        <div class="product-image">
+          <img
+          src="{{
+            product.path_image
+              ? url + product.path_image
+              : '../../../assets/images/product_default.svg'
+          }}"
+          [alt]="product.name"
+        />
+        </div>
+        <div class="product-description">
+          <p>{{ product.description }}</p>
+        </div>
+        <div class="value">
+          <label class="block text-900 text-xl font-medium">Valor</label>
+          <p>
+            {{ product.price | currency : "BRL" }} ≈
+            {{ product.price * dollar | currency : "USD" }}
+          </p>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="mb-2">
+      <label for="quantity" class="block text-900 text-xl font-medium">
+        <p class="m-0">Quantidade</p>
+        <p-tag class="stock-hint">{{ product?.stock  }} disponíveis </p-tag>
+      </label>
+      <p-inputNumber
+        id="quantity"
+        formControlName="quantity"
+        type="number"
+        placeholder="Quantidade"
+        pInputNumber
+        class="w-full md:w-30rem mt-2"
+      />
+
+      <p class="my-4">
+        <p-tag [severity]="status.severity" [value]="status.message" />
+      </p>
+    </div>
+
+    <p>
+      Total: {{ totalPrice | currency : "BRL" }} ≈
+      {{ totalPrice / 5 | currency : "USD" }}
+    </p>
+
+    <label for="email" class="block text-900 text-xl font-medium mb-2"
+      >Observação</label
+    >
+    <input
+      id="observation"
+      formControlName="observation"
+      type="text"
+      placeholder="Observação sobre a compra"
+      pInputText
+      class="w-full md:w-30rem mb-5"
+      style="padding: 1rem"
+    />
+    <div class="action-buttons">
+      <p-button
+        [style]="{ minWidth: '150px' }"
+        [disabled]="formDir.invalid || isLoading"
+        (onClick)="buy()"
+      >
+        <span
+          *ngIf="!isLoading; else loading"
+          class="flex font-bold align-items-center justify-content-center w-full"
+        >
+          Finalizar compra
+        </span>
+        <ng-template #loading>
+          <span class="flex align-items-center justify-content-center w-full">
+            <i
+              class="pi pi-spinner pi-spin"
+              style="font-size: 1rem; color: #fff"
+            ></i>
+          </span>
+        </ng-template>
+      </p-button>
+      <p-button
+        (onClick)="back()"
+        [disabled]="isLoading"
+        severity="secondary"
+        label="Voltar"
+      ></p-button>
+    </div>
+  </form>
+</section>

@@ -1,0 +1,19 @@
+<p-tabView (activeIndexChange)="tabChange($event)">
+  <p-tabPanel header="🛒 Compras"
+    >
+    
+    <h1 class="painel-title">
+        🛒
+        Suas Compras 
+    </h1>
+    <app-purchase-table (handlePageChange)="onPageChange($event)" [isLoadingData]="isLoading" *ngIf="myPurchases.total" [totalPurchases]="myPurchases.total" [purchases]="myPurchases.content"></app-purchase-table
+  ></p-tabPanel>
+  <p-tabPanel header="💲 Vendas"
+    >
+    <h1 class="painel-title">
+        💲
+        Suas Vendas
+    </h1>
+    <app-purchase-table (handlePageChange)="onPageChange($event)" [isLoadingData]="isLoading"  [totalPurchases]="mySales.total" [purchases]="mySales.content"></app-purchase-table
+  ></p-tabPanel>
+</p-tabView>

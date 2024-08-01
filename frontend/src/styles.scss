@@ -1,0 +1,18 @@
+/* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "./assets/layout/layout.scss";
+@import "./assets/override/override.scss";
+
+@layer base, app, primeng;
+
+* {
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}

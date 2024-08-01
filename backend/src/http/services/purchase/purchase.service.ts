@@ -222,7 +222,8 @@ export class PurchaseService {
             FROM Product p 
             INNER JOIN Category c ON p.category_id = c.id
             GROUP BY p.category_id 
-            ORDER BY sales_quantity DESC; 
+            ORDER BY sales_quantity DESC 
+            LIMIT 10; 
         `;
 
         // O campo sales_quantity volta da consulta como uma string, então é necessário converter para número

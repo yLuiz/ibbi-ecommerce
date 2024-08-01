@@ -216,9 +216,6 @@ export class ProductController {
   ) {
     try {
       const { filename } = image;
-
-      // const filenameResponse = await this._s3Service.uploadFile(filename, image.buffer);
-
       const productUpdated = await this._productService.updatePathImage(
         +id,
         filename,

@@ -1,32 +1,25 @@
 version: '3.8'
 
 services:
-  db:
+
+  # Database service using MySQL image
+  database:
     image: mysql:8
-    container_name: mysql_ecommerce
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: ecommerce
       MYSQL_USER: luiz
-      MYSQL_PASSWORD: luiz-2024
+      MYSQL_PASSWORD: luiz123
     ports:
       - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
 
-  app:
-    build: .
-    container_name: ecommerce-app
-    command: npm run start:dev
-    environment:
-      DATABASE_URL: mysql://luiz:luiz-2024@db:3306/ecommerce
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+  # Backend service
+  backend:
+    build: . 
+    container_name: ecommerce-backend
     ports:
       - "3000:3000"
     depends_on:
-      - db
-
-volumes:
-  mysql-data:
+      - database
+    env_file:
+      - .env

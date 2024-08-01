@@ -4,12 +4,20 @@ import { HandleError } from 'src/shared/errors/handleError';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
-    async onModuleInit() {
-        try {
-            await this.$connect();
-        }
-        catch (error) {
-            throw new HandleError(error.message);
-        }
+  constructor() {
+    super({
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL,
+        },
+      },
+    });
+  }
+  async onModuleInit() {
+    try {
+      await this.$connect();
+    } catch (error) {
+      throw new HandleError(error.message);
     }
+  }
 }

@@ -1,33 +1,24 @@
-# Dockerfile
+# Use Node.js 20.11.1 base image
+FROM node:20.11.1-alpine
 
-# Use the official Node.js image as the base image
-FROM node:20 as builder
-
-# Create and change to the app directory
-WORKDIR /usr/src/app
+# Set working directory
+WORKDIR /app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
-COPY tsconfig*.json ./
 
-COPY ./prisma/schema.prisma /usr/src/app/prisma/schema.prisma
-COPY .env /usr/src/app/.env
-
-# Install app dependencies
-RUN npm install
-
-RUN npx prisma generate --schema=/usr/src/app/prisma/schema.prisma
+# Install dependencies
+RUN npm cache clean --force
+RUN npm install --legacy-peer-deps
 
 # Copy the rest of the application code
 COPY . .
 
-# Build the app
-RUN npm run build
+# Generate Prisma Client code
+RUN npx prisma generate
 
-# Expose the port the app runs on
+# Expose the port the app runs on, here, I was using port 3000
 EXPOSE 3000
 
-CMD ["npm", "run", "start:prod"]
-
-# Define the command to run the app
-ENTRYPOINT ["npx", "prisma", "migrate", "deploy"]
+# Command to run the app
+CMD ["npm", "run", "start:migrate:prod" ]

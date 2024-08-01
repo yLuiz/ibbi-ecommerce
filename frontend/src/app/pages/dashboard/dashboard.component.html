@@ -1,6 +1,6 @@
 <p-toast key="dashboard-tst"></p-toast>
 <section class="dashboard-section">
-  <div *ngIf="!isLoading" class="card lastests-purchase-table">
+  <div *ngIf="!isLoading && columnData?.labels?.length || doughnutData?.labels?.length" class="card lastests-purchase-table">
     <p-table
       *ngIf="latestsPurchases.length"
       [value]="latestsPurchases"
@@ -31,7 +31,7 @@
   <div *ngIf="!isLoading" class="charts">
     <div class="chart-card doughnut-chart card overflow-hidden">
       <div class="content">
-        <p-chart type="doughnut" [data]="doughnutData" [options]="options" />
+        <p-chart *ngIf="doughnutData?.labels?.length" type="doughnut" [data]="doughnutData" [options]="options" />
         <h2>Total de Vendas: {{ totalSalesCategory }}</h2>
       </div>
     </div>
@@ -52,5 +52,13 @@
     [style]="{ height: '400px' }"
   >
     <p-progressSpinner ariaLabel="loading" />
+  </div>
+  
+  <div
+    *ngIf="!isLoading && !columnData?.labels?.length && !doughnutData?.labels?.length"
+    class="flex w-full align-items-center justify-content-center"
+    [style]="{ height: '400px' }"
+  >
+    Não há registros.
   </div>
 </section>

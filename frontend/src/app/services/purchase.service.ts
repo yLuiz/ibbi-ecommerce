@@ -20,7 +20,7 @@ export class PurchaseService {
     private _http: HttpClient,
   ) { }
 
-  private socket = io(environment.socketUrl);
+  private socket = io(environment.socketUrl, { transports: ['websocket'] });
 
   create(newPurchase: ICreatePurchase) {
     return this._http.post<IResponseEntity<IPurchaseCreated>>(`${environment.apiUrl}/purchase`, newPurchase);

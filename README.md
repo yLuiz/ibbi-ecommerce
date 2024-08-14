@@ -3,6 +3,7 @@
 Sistema com fluxo de E-commerce, sugerido como teste técnico pelo IBBI
 
 Acesse: https://ibbi-ecommerce.vercel.app/
+Documentação API (Swagger): https://ibbi-ecommerce-production.up.railway.app/api
 
 # 🗃 Baixando o repositório
 Para baixar e executar o sistema, faça download com os seguintes comandos:
